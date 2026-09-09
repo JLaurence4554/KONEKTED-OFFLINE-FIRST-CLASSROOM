@@ -1,0 +1,97 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.malapay.classroom'
+    compileSdk 34
+
+    signingConfigs {
+        debug {
+            // Uses default debug keystore
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.malapay.classroom"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Keep schema history for Room (useful for future migrations)
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            // LAN IP for same-network testing during development
+            buildConfigField "String", "BASE_URL", '"http://192.168.0.10/classroom-api/"'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // TODO: Replace with your real deployed backend URL before publishing
+            buildConfigField "String", "BASE_URL", '"https://yourschool.example.com/classroom-api/"'
+        }
+        internet {
+            // ngrok tunnel URL — update this after each ngrok restart
+            // Run: ngrok http 80, then copy the https URL here
+            buildConfigField "String", "BASE_URL", '"https://deepen-dropout-latter.ngrok-free.dev/classroom-api/api/"'
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+}
+
+dependencies {
+    // Core AndroidX
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.8.1'
+    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'androidx.fragment:fragment:1.8.1'
+
+    // SwipeRefreshLayout (pull-to-refresh)
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Material Design 3
+    implementation 'com.google.android.material:material:1.12.0'
+
+    // Room (SQLite abstraction)
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    // RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+
+    // Networking (online sync layer — backend REST API)
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // Embedded HTTP server (offline live quiz feature)
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
