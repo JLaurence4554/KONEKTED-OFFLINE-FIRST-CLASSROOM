@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/header_height_sub"
+    android:background="@drawable/bg_header_decorative"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/spacing_xs"
+    android:paddingEnd="@dimen/header_padding_horizontal">
+
+    <!-- Back navigation -->
+    <ImageButton
+        android:id="@+id/btnHeaderBack"
+        android:layout_width="@dimen/notification_icon_size"
+        android:layout_height="@dimen/notification_icon_size"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/header_back"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_arrow_back_white"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!-- Screen title -->
+    <TextView
+        android:id="@+id/txtHeaderTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/header_title_size"
+        tools:text="Lessons" />
+
+    <!-- Notification bell -->
+    <FrameLayout
+        android:id="@+id/btnNotificationsSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/imgNotificationBellSub"
+            android:layout_width="@dimen/notification_icon_size"
+            android:layout_height="@dimen/notification_icon_size"
+            android:contentDescription="@string/notification_bell"
+            android:padding="6dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_notification_bell" />
+
+        <TextView
+            android:id="@+id/txtNotificationBadgeSub"
+            style="@style/NotificationBadge"
+            android:layout_gravity="top|end"
+            android:visibility="gone"
+            tools:text="3"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+</LinearLayout>

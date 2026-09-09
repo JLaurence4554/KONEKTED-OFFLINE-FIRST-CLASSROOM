@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_12sdp"
+    android:layout_marginVertical="@dimen/_6sdp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/card_corner_large"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/outline_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="@dimen/_4sdp"
+            android:layout_height="match_parent"
+            android:background="@color/tertiary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:paddingVertical="@dimen/_14sdp">
+
+            <TextView
+                android:id="@+id/tvClassName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_14sdp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Grade 10 - Math" />
+
+            <TextView
+                android:id="@+id/tvSubjectSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_12sdp"
+                android:alpha="0.7"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Mathematics · Section A" />
+
+            <TextView
+                android:id="@+id/tvSchoolYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_11sdp"
+                android:alpha="0.5"
+                tools:text="SY 2025–2026" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnLeaveClass"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:padding="@dimen/_6sdp"
+            android:src="@drawable/ic_close"
+            android:alpha="0.4"
+            android:contentDescription="@string/content_description_leave_class"
+            app:tint="@color/text"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_14sdp"
+            android:src="@drawable/ic_chevron_right"
+            android:alpha="0.4"
+            app:tint="@color/text"
+            android:contentDescription="Open" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

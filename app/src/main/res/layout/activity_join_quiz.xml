@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+                <include
+            android:id="@+id/appHeader"
+            layout="@layout/include_app_header_sub"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height_sub" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height_sub"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xxl"
+            android:gravity="center_horizontal">
+
+            <!-- Icon -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ðŸ“¡"
+                android:textSize="48sp"
+                android:layout_marginBottom="@dimen/spacing_lg" />
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/join_quiz_title"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_headline"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/spacing_sm" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/join_quiz_subtitle"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/spacing_xxl" />
+
+            <!-- Name Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilStudentName"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_student_name"
+                app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                app:boxCornerRadiusTopStart="@dimen/input_corner"
+                app:startIconDrawable="@drawable/ic_back">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etStudentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- IP Address Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilIpAddress"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:hint="@string/hint_teacher_ip"
+                app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                app:boxCornerRadiusTopStart="@dimen/input_corner"
+                app:startIconDrawable="@drawable/ic_back">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etIpAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Connect Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConnect"
+                style="@style/Button.PrimaryTall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxl"
+                android:text="@string/btn_connect" />
+
+            <!-- Progress -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:visibility="gone" />
+
+            <!-- Status message -->
+            <TextView
+                android:id="@+id/tvStatusMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:gravity="center"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

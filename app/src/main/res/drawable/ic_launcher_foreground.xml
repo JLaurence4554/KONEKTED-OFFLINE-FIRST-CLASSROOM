@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Green ring background -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M54,18 C70.57,18 84,31.43 84,48 C84,64.57 70.57,78 54,78 C37.43,78 24,64.57 24,48 C24,31.43 37.43,18 54,18 Z" />
+
+    <!-- White inner circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,23 C67.81,23 79,34.19 79,48 C79,61.81 67.81,73 54,73 C40.19,73 29,61.81 29,48 C29,34.19 40.19,23 54,23 Z" />
+
+    <!-- Open book - left page -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M38,42 L38,58 C38,58 43,62 54,58 L54,42 C54,42 48,38 38,42 Z" />
+
+    <!-- Open book - right page -->
+    <path
+        android:fillColor="#2D9654"
+        android:pathData="M54,42 L54,58 C54,58 60,62 70,58 L70,42 C70,42 64,38 54,42 Z" />
+
+    <!-- Book spine -->
+    <path
+        android:fillColor="#145A31"
+        android:pathData="M54,40 L54,60 L55,60 L55,40 Z" />
+
+    <!-- Torch handle -->
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M52,34 L56,34 L55.5,42 L52.5,42 Z" />
+
+    <!-- Flame - outer -->
+    <path
+        android:fillColor="#FFD500"
+        android:pathData="M54,26 C56,29 59,31 59,34 C59,36.5 57,38 54,38 C51,38 49,36.5 49,34 C49,31 52,29 54,26 Z" />
+
+    <!-- Flame - inner highlight -->
+    <path
+        android:fillColor="#FFA000"
+        android:pathData="M54,29 C55,31 57,32 57,34 C57,35.5 55.8,36.5 54,36.5 C52.2,36.5 51,35.5 51,34 C51,32 53,31 54,29 Z" />
+
+    <!-- Stars - left -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M34,50 L35,52 L37,52 L35.5,53.5 L36,55.5 L34,54.5 L32,55.5 L32.5,53.5 L31,52 L33,52 Z" />
+
+    <!-- Stars - right -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M74,50 L75,52 L77,52 L75.5,53.5 L76,55.5 L74,54.5 L72,55.5 L72.5,53.5 L71,52 L73,52 Z" />
+
+    <!-- Laurel left -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M32,56 C34,58 36,60 38,61 C36,62 34,61 32,59 C30,57 30,55 32,56 Z" />
+
+    <!-- Laurel right -->
+    <path
+        android:fillColor="#1C7540"
+        android:pathData="M76,56 C74,58 72,60 70,61 C72,62 74,61 76,59 C78,57 78,55 76,56 Z" />
+
+</vector>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_xxl">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_sm"
+        android:fontFamily="sans-serif-medium"
+        android:text="Join a Class"
+        android:textColor="@color/text"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_xl"
+        android:text="Enter the class code shared by your teacher to join."
+        android:alpha="0.6"
+        android:textColor="@color/text"
+        android:textSize="14sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilClassCode"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Class Code"
+        app:boxCornerRadiusBottomEnd="@dimen/card_corner_small"
+        app:boxCornerRadiusBottomStart="@dimen/card_corner_small"
+        app:boxCornerRadiusTopEnd="@dimen/card_corner_small"
+        app:boxCornerRadiusTopStart="@dimen/card_corner_small"
+        app:hintTextColor="@color/primary"
+        app:strokeColor="#BDBDBD">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etClassCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="textCapCharacters"
+            android:letterSpacing="0.2"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:indeterminateTint="@color/primary"
+        android:visibility="gone" />
+
+</LinearLayout>

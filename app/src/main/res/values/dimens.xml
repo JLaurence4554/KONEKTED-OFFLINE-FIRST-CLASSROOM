@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ========================================
+         SPACING SYSTEM (4dp grid)
+         ======================================== -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">20dp</dimen>
+    <dimen name="spacing_xxl">24dp</dimen>
+    <dimen name="spacing_xxxl">32dp</dimen>
+    <dimen name="spacing_huge">40dp</dimen>
+
+    <!-- ========================================
+         CARD DIMENSIONS
+         ======================================== -->
+    <dimen name="card_corner_small">8dp</dimen>
+    <dimen name="card_corner_medium">12dp</dimen>
+    <dimen name="card_corner_large">16dp</dimen>
+    <dimen name="card_elevation_subtle">1dp</dimen>
+    <dimen name="card_elevation_normal">2dp</dimen>
+    <dimen name="card_elevation_prominent">4dp</dimen>
+
+    <!-- ========================================
+         BUTTON DIMENSIONS
+         ======================================== -->
+    <dimen name="button_corner">12dp</dimen>
+    <dimen name="button_corner_large">14dp</dimen>
+    <dimen name="button_min_height">48dp</dimen>
+    <dimen name="button_min_height_tall">56dp</dimen>
+    <dimen name="button_padding_vertical">12dp</dimen>
+    <dimen name="button_padding_horizontal">20dp</dimen>
+
+    <!-- ========================================
+         INPUT FIELD DIMENSIONS
+         ======================================== -->
+    <dimen name="input_corner">12dp</dimen>
+    <dimen name="input_corner_large">14dp</dimen>
+
+    <!-- ========================================
+         ICON DIMENSIONS
+         ======================================== -->
+    <dimen name="icon_small">20dp</dimen>
+    <dimen name="icon_medium">24dp</dimen>
+    <dimen name="icon_large">28dp</dimen>
+    <dimen name="icon_xlarge">36dp</dimen>
+    <dimen name="icon_avatar_small">40dp</dimen>
+    <dimen name="icon_avatar_medium">48dp</dimen>
+    <dimen name="icon_avatar_large">64dp</dimen>
+
+    <!-- ========================================
+         HEADER DIMENSIONS
+         ======================================== -->
+    <dimen name="header_min_height">56dp</dimen>
+    <dimen name="header_height_dashboard">68dp</dimen>
+    <dimen name="header_height_sub">68dp</dimen>
+    <dimen name="header_padding_vertical">16dp</dimen>
+    <dimen name="header_padding_horizontal">20dp</dimen>
+    <dimen name="header_title_size">20sp</dimen>
+    <dimen name="header_subtitle_size">13sp</dimen>
+    <dimen name="header_corner_radius">24dp</dimen>
+    <dimen name="avatar_size_header">36dp</dimen>
+    <dimen name="avatar_border_width">2dp</dimen>
+    <dimen name="notification_badge_size">10dp</dimen>
+    <dimen name="notification_icon_size">36dp</dimen>
+    <dimen name="header_avatar_margin_end">12dp</dimen>
+
+    <!-- ========================================
+         BOTTOM NAV DIMENSIONS
+         ======================================== -->
+    <dimen name="bottom_nav_height">80dp</dimen>
+
+    <!-- ========================================
+         FAB DIMENSIONS
+         ======================================== -->
+    <dimen name="fab_margin">20dp</dimen>
+
+    <!-- ========================================
+         TYPOGRAPHY SIZES
+         ======================================== -->
+    <dimen name="text_display">32sp</dimen>
+    <dimen name="text_headline">24sp</dimen>
+    <dimen name="text_title_large">20sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_title_small">16sp</dimen>
+    <dimen name="text_body_large">15sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_body_small">13sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_label">11sp</dimen>
+
+    <!-- ========================================
+         BADGE / PILL DIMENSIONS
+         ======================================== -->
+    <dimen name="badge_padding_horizontal">10dp</dimen>
+    <dimen name="badge_padding_vertical">4dp</dimen>
+    <dimen name="badge_corner">12dp</dimen>
+    <dimen name="badge_corner_large">14dp</dimen>
+
+    <!-- ========================================
+         SDP COMPATIBILITY ALIASES
+         (used by rewritten item layouts)
+         ======================================== -->
+    <dimen name="_2sdp">2dp</dimen>
+    <dimen name="_3sdp">3dp</dimen>
+    <dimen name="_4sdp">4dp</dimen>
+    <dimen name="_6sdp">6dp</dimen>
+    <dimen name="_8sdp">8dp</dimen>
+    <dimen name="_10sdp">10dp</dimen>
+    <dimen name="_11sdp">11sp</dimen>
+    <dimen name="_12sdp">12dp</dimen>
+    <dimen name="_13sdp">13sp</dimen>
+    <dimen name="_14sdp">14dp</dimen>
+    <dimen name="_20sdp">20dp</dimen>
+    <dimen name="_22sdp">22dp</dimen>
+    <dimen name="_28sdp">28dp</dimen>
+    <dimen name="_32sdp">32dp</dimen>
+    <dimen name="_36sdp">36dp</dimen>
+    <dimen name="_40sdp">40dp</dimen>
+    <dimen name="_48sdp">48dp</dimen>
+    <dimen name="_42sdp">42dp</dimen>
+    <dimen name="_16sdp">16dp</dimen>
+    <dimen name="_5sdp">5dp</dimen>
+</resources>

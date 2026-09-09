@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+                <include
+            android:id="@+id/appHeader"
+            layout="@layout/include_app_header_sub"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height_sub" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height_sub"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_lg">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Card.Standard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_xl">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTitle"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quiz_title"
+                        app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                        app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                        app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                        app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilInstructions"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:hint="@string/hint_quiz_instructions"
+                        app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                        app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                        app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                        app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etInstructions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:minLines="3" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilTimeLimit"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:hint="@string/hint_time_limit"
+                            app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                            app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                            app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                            app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etTimeLimit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilPassingScore"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_sm"
+                            android:layout_weight="1"
+                            android:hint="@string/hint_passing_score"
+                            app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+                            app:boxCornerRadiusBottomStart="@dimen/input_corner"
+                            app:boxCornerRadiusTopEnd="@dimen/input_corner"
+                            app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etPassingScore"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/Button.PrimaryTall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxl"
+                android:text="@string/btn_save_quiz" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/editModeActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/spacing_xxl"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xl"
+                    android:layout_marginBottom="@dimen/spacing_md"
+                    android:text="Quiz Actions"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_title_small"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnManageQuestions"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_min_height"
+                    android:text="@string/btn_manage_questions" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnViewResults"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_min_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/action_view_results" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPublishUnpublish"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_min_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    style="@style/Button.Primary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStartLiveSession"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_min_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/btn_start_live_session"
+                    android:textAllCaps="false"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    app:icon="@drawable/ic_back"
+                    app:iconGravity="textStart" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDeleteQuiz"
+                    style="@style/Button.Danger"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_min_height"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/btn_delete_quiz" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

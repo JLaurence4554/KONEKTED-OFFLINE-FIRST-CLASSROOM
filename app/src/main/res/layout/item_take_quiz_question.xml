@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_12sdp"
+    android:layout_marginVertical="@dimen/_6sdp"
+    app:cardCornerRadius="@dimen/card_corner_large"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/outline_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_16sdp">
+
+        <!-- Question Type Badge -->
+        <TextView
+            android:id="@+id/tvQuestionTypeBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:background="@drawable/bg_badge_info"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_3sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:text="Identification" />
+
+        <TextView
+            android:id="@+id/tvQuestionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text"
+            android:textSize="@dimen/_14sdp"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            tools:text="What is 1/2 + 1/4?" />
+
+        <!-- Multiple Choice RadioGroup (visible only for MCQ) -->
+        <RadioGroup
+            android:id="@+id/radioGroupChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:background="@drawable/bg_radio_choice"
+                android:paddingHorizontal="@dimen/_14sdp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_13sdp"
+                android:button="@null"
+                android:drawableEnd="@drawable/radio_button_selector"
+                android:drawablePadding="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                tools:text="A. 1/3" />
+
+            <RadioButton
+                android:id="@+id/radioB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:background="@drawable/bg_radio_choice"
+                android:paddingHorizontal="@dimen/_14sdp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_13sdp"
+                android:button="@null"
+                android:drawableEnd="@drawable/radio_button_selector"
+                android:drawablePadding="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                tools:text="B. 3/4" />
+
+            <RadioButton
+                android:id="@+id/radioC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:background="@drawable/bg_radio_choice"
+                android:paddingHorizontal="@dimen/_14sdp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_13sdp"
+                android:button="@null"
+                android:drawableEnd="@drawable/radio_button_selector"
+                android:drawablePadding="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                tools:text="C. 2/4" />
+
+            <RadioButton
+                android:id="@+id/radioD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:background="@drawable/bg_radio_choice"
+                android:paddingHorizontal="@dimen/_14sdp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text"
+                android:textSize="@dimen/_13sdp"
+                android:button="@null"
+                android:drawableEnd="@drawable/radio_button_selector"
+                android:drawablePadding="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                tools:text="D. 5/4" />
+
+        </RadioGroup>
+
+        <!-- Identification text input (hidden by default) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilIdentificationAnswer"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:visibility="gone"
+            app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+            app:boxCornerRadiusBottomStart="@dimen/input_corner"
+            app:boxCornerRadiusTopEnd="@dimen/input_corner"
+            app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etIdentificationAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_student_answer_identification"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Essay text input (hidden by default) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEssayAnswer"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:visibility="gone"
+            app:boxCornerRadiusBottomEnd="@dimen/input_corner"
+            app:boxCornerRadiusBottomStart="@dimen/input_corner"
+            app:boxCornerRadiusTopEnd="@dimen/input_corner"
+            app:boxCornerRadiusTopStart="@dimen/input_corner">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEssayAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_student_answer_essay"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:minLines="4" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

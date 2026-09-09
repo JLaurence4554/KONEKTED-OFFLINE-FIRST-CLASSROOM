@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="135"
+        android:startColor="#00000000"
+        android:centerColor="#00000000"
+        android:endColor="#1A000000"
+        android:type="linear" />
+    <corners
+        android:bottomLeftRadius="@dimen/card_corner_large"
+        android:bottomRightRadius="@dimen/card_corner_large" />
+</shape>

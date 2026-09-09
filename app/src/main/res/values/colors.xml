@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ========================================
+         CLASSROOM APP DESIGN SYSTEM
+         KONEKTED EdTech Palette
+         ======================================== -->
+
+    <!-- Basic -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- Primary: cool, blue-leaning emerald/forest green -->
+    <color name="primary">#087A4A</color>
+    <color name="primary_dark">#065E39</color>
+    <color name="primary_light">#0A995C</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <!-- Secondary: teal -->
+    <color name="secondary">#086B5B</color>
+    <color name="secondary_dark">#064F43</color>
+    <color name="secondary_light">#3A9688</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <!-- Tertiary: deep blue accent -->
+    <color name="tertiary">#263F91</color>
+    <color name="tertiary_dark">#1B2D6B</color>
+    <color name="tertiary_light">#4FA8D8</color>
+    <color name="on_tertiary">#FFFFFF</color>
+
+    <!-- Teal / Cyan -->
+    <color name="teal">#086B5B</color>
+    <color name="teal_dark">#064F43</color>
+    <color name="teal_light">#4FA8D8</color>
+
+    <!-- Background & Surface -->
+    <color name="background">#F4F7F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#EFF4F1</color>
+    <color name="on_surface">#17332A</color>
+    <color name="on_surface_variant">#5A6B63</color>
+
+    <!-- Yellow / Gold Accent -->
+    <color name="accent_yellow">#FFD21F</color>
+    <color name="accent_gold">#E8C200</color>
+    <color name="accent_warm">#FFF9E6</color>
+
+    <!-- Light Green for subtle backgrounds -->
+    <color name="light_green">#A8D8BA</color>
+    <color name="light_green_bg">#E6F4EC</color>
+
+    <!-- Blue for information states -->
+    <color name="info_blue">#4FA8D8</color>
+    <color name="info_blue_light">#E8F4FD</color>
+    <color name="deep_blue">#263F91</color>
+
+    <!-- Error / Destructive -->
+    <color name="error">#D93636</color>
+    <color name="error_light">#FDECEA</color>
+    <color name="on_error">#FFFFFF</color>
+
+    <!-- Success -->
+    <color name="success">#087A4A</color>
+    <color name="success_light">#E6F4EC</color>
+
+    <!-- Warning -->
+    <color name="warning">#E8C200</color>
+    <color name="warning_light">#FFF9E6</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#17332A</color>
+    <color name="text_secondary">#5A6B63</color>
+    <color name="text_hint">#96A39C</color>
+    <color name="text_on_green">#FFFFFF</color>
+
+    <!-- Borders & Dividers -->
+    <color name="outline">#C8D4CE</color>
+    <color name="outline_light">#E2E9E5</color>
+    <color name="divider">#DEE5E0</color>
+
+    <!-- Card States -->
+    <color name="card_highlight">#E6F4EC</color>
+
+    <!-- Status Colors -->
+    <color name="status_synced">#087A4A</color>
+    <color name="status_pending">#E8C200</color>
+    <color name="status_offline">#263F91</color>
+    <color name="status_error">#D93636</color>
+
+    <!-- Text drawn on primary surfaces -->
+    <color name="text_on_primary_muted">#CCFFFFFF</color>
+    <color name="text_on_primary_faint">#B3FFFFFF</color>
+
+    <!-- Quiz / Achievement -->
+    <color name="quiz_correct">#087A4A</color>
+    <color name="quiz_incorrect">#D93636</color>
+    <color name="quiz_unanswered">#96A39C</color>
+
+    <!-- Navigation -->
+    <color name="nav_selected">#087A4A</color>
+    <color name="nav_unselected">#96A39C</color>
+
+    <!-- Header specific -->
+    <color name="header_primary">#087A4A</color>
+    <color name="header_dark">#065E39</color>
+    <color name="header_accent">#0A995C</color>
+    <color name="header_gradient_start">#065E39</color>
+    <color name="header_gradient_end">#0A995C</color>
+    <color name="avatar_initials_bg">#26FFFFFF</color>
+    <color name="notification_red">#D93636</color>
+
+    <!-- Alpha variants for text on primary -->
+    <color name="white_alpha_80">#CCFFFFFF</color>
+    <color name="white_alpha_60">#99FFFFFF</color>
+    <color name="white_alpha_40">#66FFFFFF</color>
+
+    <!-- Aliases for layout convenience -->
+    <color name="text">#17332A</color>
+    <color name="stat_green_bg">#E6F4EC</color>
+    <color name="stat_blue_bg">#E8F4FD</color>
+    <color name="error_red">#D93636</color>
+    <color name="error_red_light">#FDECEA</color>
+
+    <!-- Analytics -->
+    <color name="chart_excellent">#087A4A</color>
+    <color name="chart_good">#4FA8D8</color>
+    <color name="chart_fair">#E8C200</color>
+    <color name="chart_needs_improvement">#D93636</color>
+    <color name="chart_track">#E8F0EB</color>
+</resources>

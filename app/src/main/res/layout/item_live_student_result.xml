@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_sm"
+    app:cardCornerRadius="@dimen/card_corner_medium"
+    app:cardElevation="@dimen/card_elevation_subtle"
+    app:cardBackgroundColor="@color/surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_lg"
+        android:gravity="center_vertical">
+
+        <!-- Student number circle -->
+        <TextView
+            android:id="@+id/tvStudentNumber"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_sync_dot"
+            android:gravity="center"
+            android:textColor="@color/on_primary"
+            android:textSize="@dimen/text_body_small"
+            android:textStyle="bold"
+            android:text="1" />
+
+        <!-- Student name -->
+        <TextView
+            android:id="@+id/tvStudentName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_md"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Student Name" />
+
+        <!-- Status badge -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_badge_info"
+            android:paddingStart="@dimen/badge_padding_horizontal"
+            android:paddingEnd="@dimen/badge_padding_horizontal"
+            android:paddingTop="@dimen/badge_padding_vertical"
+            android:paddingBottom="@dimen/badge_padding_vertical"
+            android:text="@string/live_session_student_waiting"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_caption"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

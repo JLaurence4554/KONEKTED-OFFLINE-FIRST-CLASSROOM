@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ========================================
+         TYPOGRAPHY SYSTEM
+         ======================================== -->
+
+    <style name="TextAppearance" />
+
+    <style name="TextAppearance.ScreenTitle" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">@dimen/text_headline</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
+    <style name="TextAppearance.SectionTitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.CardTitle" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">@dimen/text_title_small</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.BodySecondary" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">@dimen/text_body_small</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Caption" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextAppearance.StatNumber">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.StatNumberSecondary">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- ========================================
+         BUTTON STYLES
+         ======================================== -->
+
+    <style name="Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="cornerRadius">@dimen/button_corner_large</item>
+        <item name="android:paddingTop">@dimen/button_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/button_padding_vertical</item>
+        <item name="android:minHeight">@dimen/button_min_height</item>
+    </style>
+
+    <style name="Button.PrimaryTall" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="android:textSize">@dimen/text_body_large</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="cornerRadius">@dimen/card_corner_large</item>
+        <item name="android:minHeight">@dimen/button_min_height_tall</item>
+    </style>
+
+    <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="cornerRadius">@dimen/button_corner_large</item>
+        <item name="android:minHeight">@dimen/button_min_height</item>
+    </style>
+
+    <style name="Button.SecondarySmall" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="cornerRadius">@dimen/card_corner_small</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="cornerRadius">@dimen/card_corner_small</item>
+    </style>
+
+    <style name="Button.Danger" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/error</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="strokeColor">@color/error</item>
+        <item name="cornerRadius">@dimen/button_corner_large</item>
+    </style>
+
+    <!-- ========================================
+         CARD STYLES
+         ======================================== -->
+
+    <style name="Card.Standard" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/card_corner_large</item>
+        <item name="cardElevation">@dimen/card_elevation_subtle</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/outline_light</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="Card.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/card_corner_large</item>
+        <item name="cardElevation">@dimen/card_elevation_normal</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="Card.Stat" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/card_corner_large</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <!-- ========================================
+         INPUT FIELD STYLES
+         ======================================== -->
+
+    <style name="InputField.Standard" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/input_corner</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_corner</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_corner</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_corner</item>
+        <item name="boxStrokeColor">@color/outline</item>
+        <item name="hintTextColor">@color/primary</item>
+    </style>
+
+    <style name="InputField.Search" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/input_corner_large</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_corner_large</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_corner_large</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_corner_large</item>
+        <item name="boxStrokeColor">@color/outline</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+    </style>
+
+    <!-- ========================================
+         TOOLBAR STYLES
+         ======================================== -->
+
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">@drawable/bg_header_gradient</item>
+        <item name="titleTextColor">@color/on_primary</item>
+    </style>
+
+    <!-- ========================================
+         HEADER COMPONENT STYLES
+         ======================================== -->
+
+    <style name="HeaderAvatar">
+        <item name="android:layout_width">@dimen/avatar_size_header</item>
+        <item name="android:layout_height">@dimen/avatar_size_header</item>
+    </style>
+
+    <style name="HeaderAvatarImage">
+        <item name="android:layout_width">@dimen/avatar_size_header</item>
+        <item name="android:layout_height">@dimen/avatar_size_header</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="HeaderAvatarInitials">
+        <item name="android:layout_width">@dimen/avatar_size_header</item>
+        <item name="android:layout_height">@dimen/avatar_size_header</item>
+        <item name="android:background">@drawable/bg_avatar_initials</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="NotificationBell">
+        <item name="android:layout_width">@dimen/notification_icon_size</item>
+        <item name="android:layout_height">@dimen/notification_icon_size</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:contentDescription">@string/notification_bell</item>
+    </style>
+
+    <style name="NotificationBadge">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">@dimen/notification_badge_size</item>
+        <item name="android:minHeight">@dimen/notification_badge_size</item>
+        <item name="android:background">@drawable/bg_notification_badge</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingStart">3dp</item>
+        <item name="android:paddingEnd">3dp</item>
+    </style>
+
+    <!-- ========================================
+         STATUS BADGE STYLES
+         ======================================== -->
+
+    <style name="Badge" />
+
+    <style name="Badge.Success">
+        <item name="android:background">@drawable/bg_badge_synced</item>
+        <item name="android:textColor">@color/status_synced</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Badge.Warning">
+        <item name="android:background">@drawable/bg_badge_pending</item>
+        <item name="android:textColor">@color/status_pending</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Badge.Error">
+        <item name="android:background">@drawable/bg_badge_error</item>
+        <item name="android:textColor">@color/status_error</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Badge.Info">
+        <item name="android:background">@drawable/bg_badge_offline</item>
+        <item name="android:textColor">@color/status_offline</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- ========================================
+         DIALOG STYLES
+         ======================================== -->
+
+    <style name="DialogStyle" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/DialogShapeAppearance</item>
+    </style>
+
+    <style name="DialogShapeAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <!-- ========================================
+         EMPTY STATE
+         ======================================== -->
+
+    <style name="EmptyState" />
+
+    <style name="EmptyState.Title">
+        <item name="android:textSize">@dimen/text_body_large</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="EmptyState.Body">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
+    <!-- ========================================
+         FAB STYLE
+         ======================================== -->
+
+    <style name="Widget.App.FAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="tint">@color/on_primary</item>
+        <item name="fabSize">normal</item>
+        <item name="elevation">@dimen/card_elevation_prominent</item>
+    </style>
+
+    <!-- ========================================
+         QUIZ / QUIZ CHOICE STYLES
+         ======================================== -->
+
+    <style name="QuizChoice.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">@dimen/card_corner_medium</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="QuizChoice.CardSelected" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">@dimen/card_corner_medium</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="cardBackgroundColor">@color/light_green_bg</item>
+    </style>
+
+    <!-- ========================================
+         HEADER SECTION STYLES
+         ======================================== -->
+
+    <style name="HeaderSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_on_primary_muted</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="HeaderGreeting">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="HeaderSubtext">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_on_primary_faint</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+</resources>

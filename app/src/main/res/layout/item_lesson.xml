@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/spacing_lg"
+    android:layout_marginVertical="@dimen/spacing_xs"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/card_corner_large"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/outline_light"
+    app:cardBackgroundColor="@color/surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/spacing_lg">
+
+        <!-- Lesson Icon -->
+        <FrameLayout
+            android:id="@+id/iconArea"
+            android:layout_width="@dimen/icon_avatar_medium"
+            android:layout_height="@dimen/icon_avatar_medium"
+            android:background="@drawable/bg_circle_primary_light">
+
+            <ImageView
+                android:layout_width="@dimen/icon_medium"
+                android:layout_height="@dimen/icon_medium"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_lesson"
+                android:contentDescription="@null"
+                app:tint="@color/primary" />
+        </FrameLayout>
+
+        <!-- Text Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_md"
+            android:orientation="vertical">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvLessonTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_body"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Introduction to Fractions" />
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/tvLessonDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text_hint"
+                android:textSize="@dimen/text_caption"
+                tools:text="Sep 3, 2026" />
+
+            <!-- Description snippet -->
+            <TextView
+                android:id="@+id/tvLessonSnippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body_small"
+                android:ellipsize="end"
+                android:maxLines="2"
+                tools:text="Learn the basics of fractions, including numerators and denominators." />
+
+            <!-- Stats Row: attachments + quizzes + updated date -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvAttachmentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_primary"
+                    android:paddingStart="@dimen/badge_padding_horizontal"
+                    android:paddingEnd="@dimen/badge_padding_horizontal"
+                    android:paddingTop="@dimen/spacing_xxs"
+                    android:paddingBottom="@dimen/spacing_xxs"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/on_primary"
+                    android:textSize="@dimen/text_label"
+                    tools:text="0 files" />
+
+                <TextView
+                    android:id="@+id/tvQuizCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_xs"
+                    android:background="@drawable/bg_badge_secondary"
+                    android:paddingStart="@dimen/badge_padding_horizontal"
+                    android:paddingEnd="@dimen/badge_padding_horizontal"
+                    android:paddingTop="@dimen/spacing_xxs"
+                    android:paddingBottom="@dimen/spacing_xxs"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/on_secondary"
+                    android:textSize="@dimen/text_label"
+                    tools:text="0 quizzes" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvUpdatedDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/text_hint"
+                    android:textSize="@dimen/text_label"
+                    tools:text="Updated Sep 3, 2026" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Options Button -->
+        <ImageButton
+            android:id="@+id/btnOptions"
+            android:layout_width="@dimen/icon_medium"
+            android:layout_height="@dimen/icon_medium"
+            android:layout_marginStart="@dimen/spacing_xs"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/menu_class_options"
+            android:src="@drawable/ic_more_vert"
+            android:padding="@dimen/spacing_xs"
+            app:tint="@color/text_secondary"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

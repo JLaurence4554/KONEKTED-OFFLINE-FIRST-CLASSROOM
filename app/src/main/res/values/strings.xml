@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KONEKTED</string>
+
+    <!-- Login -->
+    <string name="login_title">Welcome Back!</string>
+    <string name="login_subtitle">Sign in to continue</string>
+    <string name="app_tagline">Learn. Grow. Achieve.</string>
+    <string name="hint_email">Email or Username</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">Log In</string>
+
+    <!-- Validation errors -->
+    <string name="error_email_required">Email is required</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_password_short">Password must be at least 6 characters</string>
+    <string name="error_invalid_credentials">Incorrect email or password</string>
+    <string name="error_unexpected">Something went wrong. Please try again.</string>
+
+    <!-- Sign Up -->
+    <string name="signup_title">Create Account</string>
+    <string name="signup_subtitle">Sign up to get started</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="label_i_am_a">I am a…</string>
+    <string name="role_teacher">Teacher</string>
+    <string name="role_student">Student</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="prompt_have_account">Already have an account? </string>
+    <string name="action_login">Log In</string>
+    <string name="prompt_no_account">Don\'t have an account? </string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="error_full_name_required">Full name is required</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_role_required">Please select a role</string>
+
+    <!-- Dashboards -->
+    <string name="teacher_dashboard_title">Teacher Dashboard</string>
+    <string name="student_dashboard_title">Student Dashboard</string>
+    <string name="btn_logout">Log Out</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_classes">Classes</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Teacher dashboard -->
+    <string name="card_total_classes">Classes</string>
+    <string name="card_total_students">Students</string>
+    <string name="card_total_lessons">Lessons</string>
+    <string name="card_total_quizzes">Quizzes</string>
+    <string name="btn_manage_classes">Manage Classes</string>
+    <string name="dashboard_greeting">Hello, %1$s</string>
+    <string name="dashboard_subtitle">Here\'s your teaching overview</string>
+    <string name="dashboard_student_subtitle">Here\'s your learning overview</string>
+    <string name="welcome_greeting_teacher">Good morning,</string>
+    <string name="welcome_greeting_student">Good morning,</string>
+    <string name="welcome_subtitle_teacher">Let\'s make today productive!</string>
+    <string name="welcome_subtitle_student">Keep learning, keep growing!</string>
+
+    <!-- Profile tab -->
+    <string name="profile_role_label">Role: %1$s</string>
+    <string name="profile_email_label">Email: %1$s</string>
+
+    <!-- Student dashboard card -->
+    <string name="card_joined_classes">Joined Classes</string>
+    <string name="btn_my_classes">My Classes</string>
+
+    <string name="my_classes_title">My Classes</string>
+
+    <!-- Class Management: teacher Classes tab -->
+    <string name="hint_search_classes">Search classes…</string>
+    <string name="fab_create_class">Create Class</string>
+    <string name="empty_classes_title">No classes yet</string>
+    <string name="empty_classes_body">Tap the + button to create your first class.</string>
+    <string name="empty_search_results">No classes match your search.</string>
+    <string name="class_students_count">%1$d student(s)</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_view_students">View Students</string>
+    <string name="menu_class_options">Class options</string>
+
+    <!-- Create / Edit Class screen -->
+    <string name="create_class_title">Create Class</string>
+    <string name="edit_class_title">Edit Class</string>
+    <string name="hint_class_name">Class Name</string>
+    <string name="hint_subject">Subject</string>
+    <string name="hint_section">Section</string>
+    <string name="hint_school_year">School Year (e.g. 2025-2026)</string>
+    <string name="btn_save_class">Save Class</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="class_created_title">Class Created!</string>
+    <string name="class_created_body">Share this code with your students so they can join:</string>
+    <string name="class_sync_status_synced">Synced to server — students can join from any network.</string>
+    <string name="class_sync_status_pending">Saved on this device. It will sync to the server automatically once you\'re online, and only then can students on other networks join it.</string>
+
+    <!-- Sync: online join class -->
+    <string name="error_not_online">You\'re offline. Your changes will be synchronized when internet is available.</string>
+
+    <!-- Sync: dashboard-level status badge (reflects real SyncManager/NetworkMonitor state) -->
+    <string name="sync_status_synced">All changes synced</string>
+    <string name="sync_status_pending">Waiting to sync</string>
+    <string name="sync_status_offline">You\'re offline. Your changes are saved and will sync when you\'re online.</string>
+    <string name="sync_status_error">Couldn\'t sync your changes. We\'ll try again.</string>
+    <string name="btn_done">Done</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_class_title">Delete this class?</string>
+    <string name="delete_class_body">This will remove \"%1$s\" and its student roster. This can\'t be undone.</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- View Students screen -->
+    <string name="view_students_title">Students</string>
+    <string name="empty_students_title">No students yet</string>
+    <string name="empty_students_body">Share the class code so students can join.</string>
+
+    <!-- Student: My Classes / Join Class -->
+    <string name="fab_join_class">Join Class</string>
+    <string name="empty_joined_classes_title">You haven\'t joined any class yet</string>
+    <string name="empty_joined_classes_body">Tap the + button and enter a class code from your teacher.</string>
+    <string name="join_class_title">Join a Class</string>
+    <string name="join_class_subtitle">Enter the class code provided by your teacher.</string>
+    <string name="hint_class_code">Enter class code</string>
+    <string name="btn_join">Join Class</string>
+    <string name="btn_joining">Joining…</string>
+    <string name="join_class_success">Joined \"%1$s\" successfully!</string>
+
+    <!-- Student: Leave Class -->
+    <string name="leave_class_title">Leave this class?</string>
+    <string name="leave_class_body">You\'ll need the class code to rejoin. Are you sure?</string>
+    <string name="btn_leave">Leave</string>
+    <string name="class_left">You\'ve left the class.</string>
+    <string name="content_description_leave_class">Leave class</string>
+
+    <!-- Lessons: list screen -->
+    <string name="lessons_title">Lessons</string>
+    <string name="fab_add_lesson">Add Lesson</string>
+    <string name="empty_lessons_title_teacher">No lessons yet</string>
+    <string name="empty_lessons_body_teacher">Tap the + button to post your first lesson.</string>
+    <string name="empty_lessons_title_student">No lessons posted yet</string>
+    <string name="empty_lessons_body_student">Check back later — your teacher hasn\'t posted any lessons.</string>
+    <string name="lesson_has_attachment">Has attachment: %1$s</string>
+    <string name="action_view_lesson">View</string>
+    <string name="hint_search_lessons">Search lessons…</string>
+    <string name="empty_search_lessons">No lessons match your search.</string>
+    <string name="total_attachments_label">%1$d attachment(s)</string>
+    <string name="total_quizzes_label">%1$d quiz(zes)</string>
+    <string name="last_updated_label">Updated %1$s</string>
+
+    <!-- Lessons: create/edit screen -->
+    <string name="create_lesson_title">New Lesson</string>
+    <string name="edit_lesson_title">Edit Lesson</string>
+    <string name="hint_lesson_title">Lesson Title</string>
+    <string name="hint_lesson_body">Description</string>
+    <string name="hint_lesson_subject">Subject (optional)</string>
+    <string name="hint_video_link">Video Link (optional)</string>
+    <string name="btn_attach_file">Attach File</string>
+    <string name="btn_replace_file">Replace File</string>
+    <string name="btn_remove_attachment">Remove</string>
+    <string name="no_attachment_label">No file attached</string>
+    <string name="btn_attach_image">Attach Image</string>
+    <string name="btn_replace_image">Replace Image</string>
+    <string name="no_image_label">No image attached</string>
+    <string name="btn_save_lesson">Save Lesson</string>
+    <string name="delete_lesson_title">Delete this lesson?</string>
+    <string name="delete_lesson_body">This will permanently remove \"%1$s\" and its attachments, if any.</string>
+
+    <!-- Lessons: detail screens (teacher + student) -->
+    <string name="btn_open_attachment">Open Attachment</string>
+    <string name="btn_open_video_link">Open Video Link</string>
+    <string name="attachment_label">Attachment</string>
+    <string name="lesson_details_title">Lesson Details</string>
+    <string name="btn_edit_lesson">Edit Lesson</string>
+    <string name="btn_delete_lesson">Delete Lesson</string>
+    <string name="btn_create_quiz">Create Quiz</string>
+    <string name="btn_view_quizzes">View Quizzes</string>
+    <string name="btn_attendance">Attendance</string>
+    <string name="btn_student_scores">Student Scores</string>
+    <string name="coming_soon_message">This isn\'t built yet — coming in a future update.</string>
+
+    <!-- Quiz list -->
+    <string name="quiz_list_title">Quizzes</string>
+    <string name="fab_add_quiz">Add Quiz</string>
+    <string name="empty_quizzes_title">No quizzes yet</string>
+    <string name="empty_quizzes_body">Tap the + button to create your first quiz.</string>
+    <string name="quiz_question_count">%1$d question(s)</string>
+    <string name="status_draft">Draft</string>
+    <string name="status_published">Published</string>
+    <string name="action_view_results">View Results</string>
+    <string name="action_publish">Publish</string>
+    <string name="action_unpublish">Unpublish</string>
+
+    <!-- Create/Edit Quiz -->
+    <string name="create_quiz_title">New Quiz</string>
+    <string name="edit_quiz_title">Edit Quiz</string>
+    <string name="hint_quiz_title">Quiz Title</string>
+    <string name="hint_quiz_instructions">Instructions</string>
+    <string name="hint_time_limit">Time Limit in minutes (optional)</string>
+    <string name="hint_passing_score">Passing Score % (0-100)</string>
+    <string name="btn_save_quiz">Save Quiz</string>
+    <string name="btn_manage_questions">Manage Questions</string>
+    <string name="error_passing_score_range">Enter a value from 0 to 100</string>
+    <string name="error_time_limit_invalid">Enter a valid number of minutes</string>
+    <string name="delete_quiz_title">Delete this quiz?</string>
+    <string name="delete_quiz_body">This will permanently remove \"%1$s\", its questions, and any student results.</string>
+    <string name="btn_delete_quiz">Delete Quiz</string>
+    <string name="publish_needs_question">Add at least one question before publishing.</string>
+
+    <!-- Question management -->
+    <string name="questions_title">Questions</string>
+    <string name="fab_add_question">Add Question</string>
+    <string name="empty_questions_title">No questions yet</string>
+    <string name="empty_questions_body">Tap the + button to add the first question.</string>
+    <string name="hint_question_text">Question</string>
+    <string name="hint_choice_a">Choice A</string>
+    <string name="hint_choice_b">Choice B</string>
+    <string name="hint_choice_c">Choice C</string>
+    <string name="hint_choice_d">Choice D</string>
+    <string name="label_correct_answer">Correct Answer</string>
+    <string name="create_question_title">New Question</string>
+    <string name="edit_question_title">Edit Question</string>
+    <string name="btn_save_question">Save Question</string>
+    <string name="delete_question_title">Delete this question?</string>
+    <string name="delete_question_body">This will permanently remove this question.</string>
+    <string name="action_move_up">Move Up</string>
+    <string name="action_move_down">Move Down</string>
+
+    <!-- Quiz results (teacher) -->
+    <string name="results_title">Results</string>
+    <string name="empty_results_title">No submissions yet</string>
+    <string name="empty_results_body">Results will appear here once students take this quiz.</string>
+    <string name="score_label">%1$d%%</string>
+    <string name="correct_count_label">%1$d / %2$d correct</string>
+
+    <!-- Student: quiz taking -->
+    <string name="quizzes_section_title">Quizzes</string>
+    <string name="btn_take_quiz">Take Quiz</string>
+    <string name="btn_view_my_score">View My Score</string>
+    <string name="no_published_quizzes">No quizzes available yet.</string>
+    <string name="time_remaining_label">Time remaining: %1$s</string>
+    <string name="btn_submit_quiz">Submit Quiz</string>
+    <string name="submit_quiz_confirm_title">Submit this quiz?</string>
+    <string name="submit_quiz_confirm_body">You can\'t change your answers after submitting.</string>
+    <string name="time_up_message">Time\'s up! Submitting your answers.</string>
+    <string name="error_answer_all_questions">Please answer every question before submitting.</string>
+
+    <!-- Quiz result (student) -->
+    <string name="quiz_result_title">Quiz Result</string>
+    <string name="result_passed">Passed</string>
+    <string name="result_failed">Not Passed</string>
+    <string name="result_date_taken">Taken on %1$s</string>
+    <string name="btn_back_to_lesson">Back to Lessons</string>
+
+    <!-- Quiz progress -->
+    <string name="quiz_progress_label">%1$d / %2$d</string>
+    <string name="quiz_score_great">Great Job!</string>
+    <string name="quiz_score_good">Good Effort!</string>
+    <string name="quiz_score_keep_trying">Keep Trying!</string>
+    <string name="quiz_score_your_score">You scored</string>
+    <string name="quiz_correct_label">Correct</string>
+    <string name="quiz_incorrect_label">Incorrect</string>
+    <string name="quiz_unanswered_label">Unanswered</string>
+
+    <!-- Redesigned Header Strings -->
+    <string name="notification_bell">Notifications</string>
+    <string name="header_back">Back</string>
+    <string name="header_greeting_hi">Hi, %1$s</string>
+    <string name="good_morning">Good morning,</string>
+    <string name="good_afternoon">Good afternoon,</string>
+    <string name="good_evening">Good evening,</string>
+    <string name="lets_make_today_productive">Let\'s make today productive!</string>
+    <string name="keep_learning">Keep learning, keep growing!</string>
+    <string name="classes_count_label">%1$d active classes</string>
+    <string name="students_count_label">%1$d students enrolled</string>
+    <string name="welcome_to_konekted">Welcome to KONEKTED</string>
+
+    <!-- Sync status compact labels -->
+    <string name="sync_compact_synced">Synced</string>
+    <string name="sync_compact_syncing">Syncing\u2026</string>
+    <string name="sync_compact_offline">Offline</string>
+    <string name="sync_compact_error">Sync error</string>
+
+    <!-- Section headers -->
+    <string name="section_quick_actions">Quick Actions</string>
+    <string name="section_overview">Overview</string>
+    <string name="section_my_classes">My Classes</string>
+    <string name="section_recent">Recent</string>
+
+    <!-- Enhanced empty states -->
+    <string name="empty_lessons_title_generic">No lessons yet</string>
+    <string name="empty_lessons_body_generic">Lessons will appear here once they are created.</string>
+
+    <!-- Offline Live Quiz (Teacher) -->
+    <string name="btn_start_live_session">Start Live Session</string>
+    <string name="live_session_title">Live Quiz Session</string>
+    <string name="live_session_waiting">Waiting for students to connect…</string>
+    <string name="live_session_students_connected">%1$d student(s) connected</string>
+    <string name="live_session_ip_label">Share this IP with your students:</string>
+    <string name="live_session_copy_ip">Copy IP</string>
+    <string name="live_session_start_quiz">Start Quiz</string>
+    <string name="live_session_end_session">End Session</string>
+    <string name="live_session_active">Quiz is active — students are taking it</string>
+    <string name="live_session_closed">Session ended</string>
+    <string name="live_session_results_title">Live Results</string>
+    <string name="live_session_student_name">%1$s</string>
+    <string name="live_session_student_waiting">Waiting…</string>
+    <string name="live_session_student_submitted">Score: %1$d%% (%2$d/%3$d)</string>
+    <string name="live_session_submitted_count">%1$d / %2$d submitted</string>
+    <string name="live_session_wifi_hint">Connect all devices to the same WiFi network (school router or phone hotspot).</string>
+    <string name="live_session_ip_copied">IP address copied!</string>
+    <string name="live_session_server_error">Failed to start server. Port may be in use.</string>
+    <string name="live_session_no_questions">Add at least one question before starting a live session.</string>
+
+    <!-- Offline Live Quiz (Student) -->
+    <string name="join_quiz_title">Join Live Quiz</string>
+    <string name="join_quiz_subtitle">Enter your teacher\'s IP address to join the quiz session.</string>
+    <string name="hint_teacher_ip">Teacher\'s IP address (e.g. 192.168.1.5:8080)</string>
+    <string name="hint_student_name">Your name</string>
+    <string name="btn_connect">Connect</string>
+    <string name="btn_connecting">Connecting…</string>
+    <string name="join_quiz_waiting">Connected! Waiting for teacher to start the quiz…</string>
+    <string name="join_quiz_error">Could not connect. Check the IP and make sure you\'re on the same WiFi.</string>
+    <string name="join_quiz_name_required">Please enter your name</string>
+    <string name="join_quiz_ip_required">Please enter the teacher\'s IP address</string>
+
+    <!-- Offline Quiz Taking -->
+    <string name="local_quiz_title">Live Quiz</string>
+    <string name="local_quiz_submitted">Your answer has been submitted!</string>
+    <string name="local_quiz_already_submitted">You\'ve already submitted this quiz.</string>
+    <string name="local_quiz_score_title">Your Score</string>
+    <string name="local_quiz_passed">PASSED</string>
+    <string name="local_quiz_failed">NOT PASSED</string>
+    <string name="local_quiz_score_format">%1$d%%</string>
+    <string name="local_quiz_correct_format">%1$d / %2$d correct</string>
+    <string name="local_quiz_thank_you">Thank you for taking the quiz!</string>
+
+    <!-- Teacher Dashboard -->
+    <string name="btn_join_quiz">Join Quiz</string>
+    <!-- Question Types -->
+    <string name="question_type_label">Question Type</string>
+    <string name="type_multiple_choice">Multiple Choice</string>
+    <string name="type_identification">Identification</string>
+    <string name="type_essay">Essay</string>
+    <string name="hint_correct_answer_identification">Correct Answer</string>
+    <string name="hint_model_answer_essay">Model / Reference Answer (for grading reference)</string>
+    <string name="hint_student_answer_identification">Type your answer here</string>
+    <string name="hint_student_answer_essay">Write your answer here</string>
+    <string name="error_identification_answer_required">Please enter the correct answer for this identification question</string>
+    <string name="error_text_answer_required">Please answer this question</string>
+    <string name="label_needs_manual_grading">Needs manual grading</string>
+
+    <!-- Analytics Dashboard -->
+    <string name="nav_analytics">Analytics</string>
+    <string name="analytics_title">Analytics</string>
+    <string name="analytics_subtitle">Performance insights for your class</string>
+    <string name="analytics_select_class">Select a class</string>
+    <string name="analytics_all_classes">All Classes</string>
+    <string name="analytics_no_class_selected">Select a class above to view analytics</string>
+    <string name="analytics_avg_score">Avg Score</string>
+    <string name="analytics_attendance_rate">Attendance</string>
+    <string name="analytics_total_quizzes">Quizzes</string>
+    <string name="analytics_total_lessons">Lessons</string>
+    <string name="analytics_total_students">Students</string>
+    <string name="analytics_total_submissions">Submissions</string>
+    <string name="analytics_score_distribution">Score Distribution</string>
+    <string name="analytics_student_performance">Student Performance</string>
+    <string name="analytics_no_data">No analytics data yet</string>
+    <string name="analytics_no_data_body">Quizzes and attendance records will appear here once students start participating.</string>
+    <string name="analytics_quizzes_taken">%1$d quiz(zes) taken</string>
+    <string name="analytics_attendance_format">%1$d%% attendance</string>
+    <string name="analytics_score_format">%1$d%%</string>
+    <string name="analytics_no_submissions">No quiz submissions yet</string>
+    <string name="analytics_no_attendance">No attendance records yet</string>
+
+    <!-- Student Self-Analytics -->
+    <string name="nav_my_progress">My Progress</string>
+    <string name="my_progress_title">My Progress</string>
+    <string name="my_progress_subtitle">Your performance across all classes</string>
+    <string name="my_progress_overall">Overall</string>
+    <string name="my_progress_avg_score">My Avg Score</string>
+    <string name="my_progress_attendance">My Attendance</string>
+    <string name="my_progress_quizzes_taken">Quizzes Taken</string>
+    <string name="my_progress_total_classes">Classes Joined</string>
+    <string name="my_progress_score_trend">Score Trend</string>
+    <string name="my_progress_quiz_history">Quiz History</string>
+    <string name="my_progress_no_quizzes">You haven\'t taken any quizzes yet.</string>
+    <string name="my_progress_no_quizzes_body">Quizzes will appear here once your teacher assigns them and you complete them.</string>
+    <string name="my_progress_correct_format">%1$d/%2$d correct</string>
+    <string name="my_progress_date_format">%1$s</string>
+
+    <!-- Join Request / Approval -->
+    <string name="join_requests_title">Join Requests</string>
+    <string name="no_pending_requests">No pending requests</string>
+    <string name="no_pending_requests_body">When students request to join your classes, they will appear here.</string>
+    <string name="btn_approve">Approve</string>
+    <string name="btn_deny">Deny</string>
+    <string name="approve_request_title">Approve Request</string>
+    <string name="approve_request_body">Allow %1$s to join %2$s?</string>
+    <string name="deny_request_title">Deny Request</string>
+    <string name="deny_request_body">Reject %1$s\'s request to join %2$s?</string>
+    <string name="request_approved">%1$s has been added to the class.</string>
+    <string name="request_denied">%1$s\'s request has been denied.</string>
+    <string name="join_request_sent">Request sent! Waiting for teacher approval.</string>
+    <string name="join_request_pending">You already have a pending request for this class.</string>
+    <string name="join_request_denied">Your request to join this class was denied.</string>
+    <string name="student_avatar">Student avatar</string>
+</resources>
