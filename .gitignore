@@ -1,0 +1,9 @@
+# Root-level ignores.
+.idea/
+.opencode/
+.freebuff/
+*.log
+
+# ClassroomApp/ is its own git repo (with its own remote on GitHub) - do not
+# nest/embed it inside this outer repo, just leave it alone entirely here.
+/ClassroomApp/

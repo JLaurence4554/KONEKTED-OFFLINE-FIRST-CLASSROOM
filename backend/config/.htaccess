@@ -1,0 +1,4 @@
+# Prevent this folder (which holds DB credentials) from ever being served
+# directly over HTTP. Only PHP files that `require` config/database.php
+# from elsewhere in this project can use it.
+Require all denied

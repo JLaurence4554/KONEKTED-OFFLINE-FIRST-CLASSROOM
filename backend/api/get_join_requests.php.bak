@@ -1,0 +1,50 @@
+<?php
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/common.php';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    send_json(false, 'Method not allowed.', null, 405);
+}
+
+$teacherEmail = trim($_GET['teacherEmail'] ?? '');
+
+if ($teacherEmail === '') {
+    send_json(false, 'Missing teacherEmail parameter.');
+}
+
+try {
+    $pdo = get_db_connection();
+
+    $email = strtolower($teacherEmail);
+    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = \'Teacher\'');
+    $stmt->execute([$email]);
+    $teacherRow = $stmt->fetch();
+    if (!$teacherRow) {
+        send_json(true, 'No pending requests.', ['requests' => []]);
+        return;
+    }
+    $teacherId = (int) $teacherRow['id'];
+
+    $stmt = $pdo->prepare('
+        SELECT jr.id AS requestId, jr.class_id AS classId, jr.student_id AS studentId,
+               u.full_name AS studentName, c.class_name AS className,
+               jr.status AS status, jr.requested_at AS requestedAt
+        FROM join_requests jr
+        INNER JOIN classes c ON jr.class_id = c.id
+        INNER JOIN users u ON jr.student_id = u.id
+        WHERE c.teacher_id = ? AND jr.status = \'PENDING\'
+        ORDER BY jr.requested_at DESC
+    ');
+    $stmt->execute([$teacherId]);
+    $requests = $stmt->fetchAll();
+
+    // Format requestedAt as ISO string for Android
+    foreach ($requests as &$req) {
+        $req['requestedAt'] = strtotime($req['requestedAt']) * 1000;
+    }
+
+    send_json(true, count($requests) . ' pending request(s).', ['requests' => $requests]);
+} catch (Throwable $e) {
+    error_log('get_join_requests.php error: ' . $e->getMessage());
+    send_json(false, 'Unable to connect to the server. Please try again.', null, 500);
+}

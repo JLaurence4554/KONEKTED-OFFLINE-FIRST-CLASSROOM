@@ -1,0 +1,697 @@
+<mxfile host="app.diagrams.net" agent="Codebuff" pages="5">
+  <diagram id="1_Auth" name="1. Startup and Authentication">
+    <mxGraphModel dx="484" dy="264" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a_start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontStyle=1;fontSize=13;" value="Open App" vertex="1">
+          <mxGeometry height="50" width="160" x="440" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sess" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" value="Session Valid?" vertex="1">
+          <mxGeometry height="80" width="150" x="445" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="a_role" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" value="User Role?" vertex="1">
+          <mxGeometry height="80" width="140" x="450" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="a_tdash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#004085;fontStyle=1;fontSize=13;" value="Teacher Dashboard" vertex="1">
+          <mxGeometry height="50" width="200" x="200" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sdash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontStyle=1;fontSize=13;" value="Student Dashboard" vertex="1">
+          <mxGeometry height="50" width="200" x="620" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="a_login" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" value="Login Page" vertex="1">
+          <mxGeometry height="45" width="170" x="750" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="a_cred" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Enter Email + Password" vertex="1">
+          <mxGeometry height="40" width="160" x="755" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="a_credchk" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="Credentials OK?" vertex="1">
+          <mxGeometry height="80" width="140" x="765" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="a_err" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="Error: Wrong email or password" vertex="1">
+          <mxGeometry height="40" width="170" x="930" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="a_session" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontSize=12;" value="Create Session" vertex="1">
+          <mxGeometry height="40" width="140" x="770" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="a_signup" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" value="Sign Up Page" vertex="1">
+          <mxGeometry height="45" width="150" x="1190" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="a_regfields" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;align=center;" value="Enter: Name + Email + Password + Role (Teacher / Student)" vertex="1">
+          <mxGeometry height="55" width="180" x="1175" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_register" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Register" vertex="1">
+          <mxGeometry height="40" width="120" x="1295" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="a_save" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="Save to Room DB (PBKDF2 hash)" vertex="1">
+          <mxGeometry height="55" width="170" x="1270" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1" edge="1" parent="1" source="a_start" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_sess">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2" edge="1" parent="1" source="a_sess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="a_role" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3" edge="1" parent="1" source="a_sess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#b85450;" target="a_login" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4" edge="1" parent="1" source="a_login" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_cred">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s5" edge="1" parent="1" source="a_cred" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_credchk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s6" edge="1" parent="1" source="a_credchk" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="a_session" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s7" edge="1" parent="1" source="a_credchk" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#b85450;" target="a_err" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s8" edge="1" parent="1" source="a_err" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;" target="a_login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="430" />
+              <mxPoint x="1160" y="280" />
+              <mxPoint x="1010" y="280" />
+              <mxPoint x="1010" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_s9" edge="1" parent="1" source="a_login" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontStyle=2;" target="a_signup" value="Tap Sign Up">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1002.52" y="140" />
+              <mxPoint x="1002.52" y="132.52" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_s10" edge="1" parent="1" source="a_signup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_regfields">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s11" edge="1" parent="1" source="a_regfields" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_register">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s12" edge="1" parent="1" source="a_register" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_save">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s13" edge="1" parent="1" source="a_save" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_session">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1205" y="520" />
+              <mxPoint x="840.06" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_s14" edge="1" parent="1" source="a_session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="a_role">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s15" edge="1" parent="1" source="a_role" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontStyle=1;" target="a_tdash" value="Teacher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s16" edge="1" parent="1" source="a_role" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontStyle=1;" target="a_sdash" value="Student">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="2_Teacher" name="2. Teacher Flow">
+    <mxGraphModel dx="1195" dy="652" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- divider between main flow and other-tabs column -->
+        <mxCell id="t_divider" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e5e8e0;strokeColor=none;" value="" vertex="1">
+          <mxGeometry x="628" y="10" width="3" height="560" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_dash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontStyle=1;fontSize=13;" value="Teacher Dashboard" vertex="1">
+          <mxGeometry x="205" y="20" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- main spine: classes -->
+        <mxCell id="t_create" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=12;" value="Create Class" vertex="1">
+          <mxGeometry x="70" y="120" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="t_selclass" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=12;" value="Select Existing Class" vertex="1">
+          <mxGeometry x="350" y="120" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="t_createflow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10;align=left;spacingLeft=8;" value="Enter name / subject / section / year&#10;&#8594; Save to Room DB &#8594; Sync to server" vertex="1">
+          <mxGeometry x="40" y="210" width="260" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="t_classactions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;align=left;spacingLeft=8;" value="Class actions:&#10;&#8226; View Roster&#10;&#8226; Approve / Reject Join Requests&#10;&#8226; Delete Class" vertex="1">
+          <mxGeometry x="330" y="210" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- main spine: lessons -->
+        <mxCell id="t_lessons" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontStyle=1;fontSize=12;" value="Lessons List (for selected class)" vertex="1">
+          <mxGeometry x="170" y="330" width="340" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_createlesson" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10;align=left;spacingLeft=8;" value="Create Lesson&#10;(title, body, video link, attachment)&#10;&#8594; Save &amp; Sync" vertex="1">
+          <mxGeometry x="60" y="430" width="260" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="t_lessondetail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Select Lesson &#8594; Lesson Detail" vertex="1">
+          <mxGeometry x="360" y="430" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- main spine: quiz hub -->
+        <mxCell id="t_quizhub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontStyle=1;fontSize=13;" value="Quiz Hub (for selected lesson)" vertex="1">
+          <mxGeometry x="175" y="560" width="330" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_qa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10;" value="Create Quiz: add MCQ questions&#10;&#8594; Publish &#8594; Sync" vertex="1">
+          <mxGeometry x="60" y="660" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_qb" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10;" value="Start Live Session&#10;(same Wi-Fi, real-time)" vertex="1">
+          <mxGeometry x="330" y="660" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_qc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="View All Scores &#8594;&#10;Grade Essay Answers" vertex="1">
+          <mxGeometry x="60" y="750" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_qd" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="Toggle Publish / Unpublish&#10;(after session ends)" vertex="1">
+          <mxGeometry x="330" y="750" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_end" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontStyle=1;fontSize=12;" value="Teacher flow complete" vertex="1">
+          <mxGeometry x="200" y="845" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- side column: other dashboard tabs -->
+        <mxCell id="t_sidehdr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontStyle=1;fontSize=13;" value="Other Dashboard Tabs" vertex="1">
+          <mxGeometry x="700" y="120" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="t_analytics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Analytics tab &#8594; Select a Class" vertex="1">
+          <mxGeometry x="690" y="210" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t_charts" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="View Charts (bar, circular progress,&#10;score trend) + Student Performance List" vertex="1">
+          <mxGeometry x="670" y="300" width="280" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="t_notif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="Notifications tab &#8594; notification list&#10;(join requests, sync activity, quiz activity)" vertex="1">
+          <mxGeometry x="670" y="400" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t_profile" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Profile tab &#8594; View/Edit Profile &#8594; Logout" vertex="1">
+          <mxGeometry x="680" y="495" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- edges -->
+        <mxCell id="e_t1" edge="1" parent="1" source="t_dash" target="t_create" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t2" edge="1" parent="1" source="t_dash" target="t_selclass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t3" edge="1" parent="1" source="t_create" target="t_createflow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t4" edge="1" parent="1" source="t_selclass" target="t_classactions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t5" edge="1" parent="1" source="t_createflow" target="t_lessons" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t6" edge="1" parent="1" source="t_classactions" target="t_lessons" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t7" edge="1" parent="1" source="t_lessons" target="t_createlesson" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t8" edge="1" parent="1" source="t_lessons" target="t_lessondetail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t9" edge="1" parent="1" source="t_createlesson" target="t_quizhub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t10" edge="1" parent="1" source="t_lessondetail" target="t_quizhub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t11" edge="1" parent="1" source="t_quizhub" target="t_qa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t12" edge="1" parent="1" source="t_quizhub" target="t_qb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t13" edge="1" parent="1" source="t_qa" target="t_qc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t14" edge="1" parent="1" source="t_qb" target="t_qd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t15" edge="1" parent="1" source="t_qc" target="t_end" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t16" edge="1" parent="1" source="t_qd" target="t_end" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t17" edge="1" parent="1" source="t_dash" target="t_sidehdr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;strokeColor=#33499c;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t18" edge="1" parent="1" source="t_sidehdr" target="t_analytics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t19" edge="1" parent="1" source="t_analytics" target="t_charts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t20" edge="1" parent="1" source="t_charts" target="t_notif" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t21" edge="1" parent="1" source="t_notif" target="t_profile" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="3_Student" name="3. Student Flow">
+    <mxGraphModel dx="2893" dy="923" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="s_divider" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e5e8e0;strokeColor=none;" value="" vertex="1">
+          <mxGeometry x="628" y="10" width="3" height="460" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s_dash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontStyle=1;fontSize=13;" value="Student Dashboard" vertex="1">
+          <mxGeometry x="205" y="20" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- main spine: join / select class -->
+        <mxCell id="s_join" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=12;" value="Join Class (enter code)" vertex="1">
+          <mxGeometry x="60" y="120" width="200" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="s_myclasses" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=12;" value="My Joined Classes &#8594; Select a Class" vertex="1">
+          <mxGeometry x="340" y="120" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="s_joinflow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10;align=left;spacingLeft=8;" value="Checks connectivity &#8594; finds class by code&#10;&#8594; saves locally &#8594; syncs membership&#10;(shows error if offline or code not found)" vertex="1">
+          <mxGeometry x="30" y="210" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_classactions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;align=left;spacingLeft=8;" value="Class actions:&#10;&#8226; View Lessons&#10;&#8226; Leave Class" vertex="1">
+          <mxGeometry x="350" y="210" width="230" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- main spine: lessons -->
+        <mxCell id="s_lessons" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontStyle=1;fontSize=11;" value="Lessons List &#8594; Select Lesson &#8594;&#10;Lesson Detail (content + attachments)" vertex="1">
+          <mxGeometry x="170" y="330" width="340" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- decisions -->
+        <mxCell id="s_hasquiz" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontStyle=1;fontSize=11;" value="Quiz available?" vertex="1">
+          <mxGeometry x="260" y="440" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_noquiz" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontSize=11;" value="No quiz yet" vertex="1">
+          <mxGeometry x="480" y="460" width="130" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="s_livecheck" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10;" value="Live session active right now?" vertex="1">
+          <mxGeometry x="255" y="570" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="s_livenote" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#c9922f;fontSize=10;fontColor=#7a5c00;" value="Join live quiz in real time&#10;&#8594; see Diagram 4 (Offline Live Quiz)" vertex="1">
+          <mxGeometry x="480" y="585" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_takequiz" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10;align=left;spacingLeft=8;" value="Take Quiz (MCQ, timer)&#10;&#8594; submit &#8594; score &#8594; save locally&#10;&#8594; sync &#8594; view result" vertex="1">
+          <mxGeometry x="200" y="710" width="280" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s_end" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontStyle=1;fontSize=12;" value="Student flow complete" vertex="1">
+          <mxGeometry x="200" y="830" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- side column -->
+        <mxCell id="s_sidehdr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontStyle=1;fontSize=13;" value="Other Dashboard Tabs" vertex="1">
+          <mxGeometry x="700" y="120" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="s_analytics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="Analytics tab &#8594;&#10;Quiz History + Performance Stats" vertex="1">
+          <mxGeometry x="670" y="210" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_notif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10;" value="Notifications tab &#8594; notifications&#10;(join approved, new lesson / quiz posted)" vertex="1">
+          <mxGeometry x="670" y="305" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_profile" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Profile tab &#8594; View/Edit Profile &#8594; Logout" vertex="1">
+          <mxGeometry x="680" y="400" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- edges -->
+        <mxCell id="e_s1" edge="1" parent="1" source="s_dash" target="s_join" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2" edge="1" parent="1" source="s_dash" target="s_myclasses" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3" edge="1" parent="1" source="s_join" target="s_joinflow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4" edge="1" parent="1" source="s_myclasses" target="s_classactions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s5" edge="1" parent="1" source="s_joinflow" target="s_lessons" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s6" edge="1" parent="1" source="s_classactions" target="s_lessons" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s7" edge="1" parent="1" source="s_lessons" target="s_hasquiz" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s8" edge="1" parent="1" source="s_hasquiz" target="s_noquiz" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#b3453f;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s9" edge="1" parent="1" source="s_hasquiz" target="s_livecheck" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#0e7a63;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s10" edge="1" parent="1" source="s_livecheck" target="s_takequiz" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#b3453f;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s11" edge="1" parent="1" source="s_livecheck" target="s_livenote" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#0e7a63;dashed=1;strokeColor=#c9922f;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s12" edge="1" parent="1" source="s_takequiz" target="s_end" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s15" edge="1" parent="1" source="s_dash" target="s_sidehdr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;strokeColor=#0e7a63;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s16" edge="1" parent="1" source="s_sidehdr" target="s_analytics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s17" edge="1" parent="1" source="s_analytics" target="s_notif" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s18" edge="1" parent="1" source="s_notif" target="s_profile" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="4_LiveQuiz" name="4. Offline Live Quiz (Same WiFi)">
+    <mxGraphModel dx="1251" dy="693" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gt" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1f5fe;strokeColor=#004085;fontStyle=1;fontSize=13;collapsible=0;" value="Teacher Device (SocketServer :8080)" vertex="1">
+          <mxGeometry height="600" width="460" x="40" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ls4" parent="gt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Wait for teacher to start" vertex="1">
+          <mxGeometry height="40" width="190" x="270" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="gs" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e8f5e9;strokeColor=#28a745;fontStyle=1;fontSize=13;collapsible=0;" value="Student Device (JoinQuizActivity)" vertex="1">
+          <mxGeometry height="600" width="460" x="580" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lt1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#e0a800;fontStyle=1;fontSize=12;" value="Open Live Session" vertex="1">
+          <mxGeometry height="45" width="200" x="130" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lt2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Display IP Address + Port" vertex="1">
+          <mxGeometry height="40" width="220" x="120" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="lt3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Wait for students to join" vertex="1">
+          <mxGeometry height="40" width="200" x="130" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="lt4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" value="Start quiz?" vertex="1">
+          <mxGeometry height="80" width="120" x="170" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="lt5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontStyle=1;fontSize=12;" value="Live Scoreboard (real-time)" vertex="1">
+          <mxGeometry height="45" width="220" x="120" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="lt6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="End Session" vertex="1">
+          <mxGeometry height="40" width="160" x="150" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="ls1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#e0a800;fontStyle=1;fontSize=12;" value="Open JoinQuizActivity" vertex="1">
+          <mxGeometry height="45" width="220" x="120" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ls2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Enter Teacher IP + Your Name" vertex="1">
+          <mxGeometry height="40" width="220" x="120" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ls3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Connect to Teacher via IP" vertex="1">
+          <mxGeometry height="40" width="200" x="130" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="ls5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="Teacher started?" vertex="1">
+          <mxGeometry height="70" width="140" x="160" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="ls6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#e0a800;fontStyle=1;fontSize=12;" value="Answer Questions (MCQ + Timer)" vertex="1">
+          <mxGeometry height="45" width="220" x="120" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="ls7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontSize=11;" value="Submit answers to teacher" vertex="1">
+          <mxGeometry height="40" width="190" x="135" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="ls8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontStyle=1;fontSize=11;" value="Show score on device" vertex="1">
+          <mxGeometry height="40" width="160" x="150" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="h1" edge="1" parent="1" source="lt1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="lt2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h2" edge="1" parent="1" source="lt2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="lt3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" edge="1" parent="1" source="lt3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="lt4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" edge="1" parent="1" source="lt4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="lt5" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h4b" edge="1" parent="1" source="lt4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#b85450;dashed=1;" target="lt3" value="NO">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="355" />
+              <mxPoint x="120" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h5" edge="1" parent="1" source="lt5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="lt6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h6" edge="1" parent="1" source="ls1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h7" edge="1" parent="1" source="ls2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h8" edge="1" parent="1" source="ls3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h9" edge="1" parent="1" source="ls4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h10" edge="1" parent="1" source="ls5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="ls6" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h10b" edge="1" parent="1" source="ls5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontColor=#b85450;dashed=1;" target="ls4" value="NO">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="435" />
+              <mxPoint x="370" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h11" edge="1" parent="1" source="ls6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h12" edge="1" parent="1" source="ls7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="ls8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h13" edge="1" parent="1" source="ls7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=10;fontStyle=2;dashed=1;strokeColor=#e0a800;" target="lt5" value="real-time via Socket">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="610" />
+              <mxPoint x="560" y="462" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="5_Sync" name="5. Background Sync (SyncManager)">
+    <mxGraphModel dx="1178" dy="652" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="y1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="SyncManager triggers: onResume / after creating content" vertex="1">
+          <mxGeometry height="45" width="320" x="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="y2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" value="Pending items in local DB?" vertex="1">
+          <mxGeometry height="80" width="180" x="280" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="y3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=12;fontStyle=1;" value="No sync needed" vertex="1">
+          <mxGeometry height="50" width="140" x="540" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="y4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" value="Device online?" vertex="1">
+          <mxGeometry height="80" width="140" x="295" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="y5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontStyle=1;fontSize=12;" value="Upload pending data to backend" vertex="1">
+          <mxGeometry height="50" width="240" x="240" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="y6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#e0a800;fontSize=11;" value="Offline - retry on next onResume" vertex="1">
+          <mxGeometry height="50" width="210" x="510" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="y7" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="Success" vertex="1">
+          <mxGeometry height="55" width="170" x="150" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="y8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontSize=11;" value="Mark as SYNCED in Room DB" vertex="1">
+          <mxGeometry height="40" width="200" x="60" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="y9" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="Failure" vertex="1">
+          <mxGeometry height="55" width="170" x="370" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="y10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="Mark as FAILED (will retry later)" vertex="1">
+          <mxGeometry height="40" width="200" x="380" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="z1" edge="1" parent="1" source="y1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="y2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z2" edge="1" parent="1" source="y2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#b85450;" target="y3" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z3" edge="1" parent="1" source="y2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="y4" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z4" edge="1" parent="1" source="y4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#28a745;" target="y5" value="YES">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z5" edge="1" parent="1" source="y4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;fontSize=11;fontColor=#b85450;" target="y6" value="NO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z6" edge="1" parent="1" source="y5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="y7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="480" />
+              <mxPoint x="300" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z7" edge="1" parent="1" source="y5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="y9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="480" />
+              <mxPoint x="420" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z8" edge="1" parent="1" source="y7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="y8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z9" edge="1" parent="1" source="y9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" target="y10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="6_UseCase" name="6. Use Case Diagram">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1470" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafaf7;strokeColor=#565f52;fontSize=13;fontStyle=1;" value="KONEKTED — Offline-First Classroom Learning System"><mxGeometry x="260" y="30" width="980" height="1380" as="geometry" /></mxCell><mxCell id="n1" parent="1" vertex="1" style="shape=umlActor;whiteSpace=wrap;html=1;strokeColor=#33499c;fillColor=#ffffff;fontSize=12;fontStyle=1;fontColor=#33499c;verticalLabelPosition=bottom;verticalAlign=top;" value="TEACHER"><mxGeometry x="30.0" y="660" width="40" height="90" as="geometry" /></mxCell><mxCell id="n2" parent="1" vertex="1" style="shape=umlActor;whiteSpace=wrap;html=1;strokeColor=#0e7a63;fillColor=#ffffff;fontSize=12;fontStyle=1;fontColor=#0e7a63;verticalLabelPosition=bottom;verticalAlign=top;" value="STUDENT"><mxGeometry x="1440.0" y="480" width="40" height="90" as="geometry" /></mxCell><mxCell id="n3" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Login / Register
+(local-first, PBKDF2)"><mxGeometry x="320" y="68" width="280" height="84" as="geometry" /></mxCell><mxCell id="n4" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Manage Classes
+create · edit · delete · search"><mxGeometry x="310" y="187" width="300" height="92" as="geometry" /></mxCell><mxCell id="n5" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="View Students (Roster)"><mxGeometry x="310" y="314" width="300" height="80" as="geometry" /></mxCell><mxCell id="n6" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Approve / Deny
+Join Requests"><mxGeometry x="310" y="429" width="300" height="92" as="geometry" /></mxCell><mxCell id="n7" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Manage Lessons
+create · edit · delete"><mxGeometry x="310" y="556" width="300" height="92" as="geometry" /></mxCell><mxCell id="n8" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Manage Quizzes &amp; Questions
+MCQ · Identification · Essay
+draft / publish"><mxGeometry x="315" y="683" width="290" height="108" as="geometry" /></mxCell><mxCell id="n9" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Start Live Quiz Session
+same Wi-Fi, direct to device"><mxGeometry x="310" y="826" width="300" height="88" as="geometry" /></mxCell><mxCell id="n10" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="View Quiz Results"><mxGeometry x="310" y="949" width="300" height="84" as="geometry" /></mxCell><mxCell id="n11" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Grade Essay Answers
+score not shown to student yet"><mxGeometry x="315" y="1068" width="290" height="92" as="geometry" /></mxCell><mxCell id="n12" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="View Analytics"><mxGeometry x="310" y="1195" width="300" height="70" as="geometry" /></mxCell><mxCell id="n13" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=11;fontStyle=1;" value="Manage Profile"><mxGeometry x="310" y="1300" width="300" height="72" as="geometry" /></mxCell><mxCell id="e14" edge="1" parent="1" source="n1" target="n3" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e15" edge="1" parent="1" source="n1" target="n4" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e16" edge="1" parent="1" source="n1" target="n5" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e17" edge="1" parent="1" source="n1" target="n6" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e18" edge="1" parent="1" source="n1" target="n7" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e19" edge="1" parent="1" source="n1" target="n8" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e20" edge="1" parent="1" source="n1" target="n9" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e21" edge="1" parent="1" source="n1" target="n10" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e22" edge="1" parent="1" source="n1" target="n11" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e23" edge="1" parent="1" source="n1" target="n12" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e24" edge="1" parent="1" source="n1" target="n13" style="endArrow=none;html=1;strokeColor=#33499c;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="n25" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Login / Register
+(local-first, PBKDF2)"><mxGeometry x="900" y="68" width="280" height="84" as="geometry" /></mxCell><mxCell id="n26" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Join Class
+enter code — requires connectivity"><mxGeometry x="890" y="187" width="300" height="92" as="geometry" /></mxCell><mxCell id="n27" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Leave Class"><mxGeometry x="890" y="314" width="300" height="76" as="geometry" /></mxCell><mxCell id="n28" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="View Lessons
+content + attachments"><mxGeometry x="890" y="425" width="300" height="84" as="geometry" /></mxCell><mxCell id="n29" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Take Quiz
+MCQ · Identification · Essay
+one attempt only"><mxGeometry x="885" y="544" width="310" height="100" as="geometry" /></mxCell><mxCell id="n30" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Join Live Quiz
+same Wi-Fi, direct to device"><mxGeometry x="890" y="679" width="300" height="92" as="geometry" /></mxCell><mxCell id="n31" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="View Quiz Result"><mxGeometry x="890" y="806" width="300" height="80" as="geometry" /></mxCell><mxCell id="n32" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="View Progress
+“My Progress” analytics"><mxGeometry x="890" y="921" width="300" height="84" as="geometry" /></mxCell><mxCell id="n33" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;fontStyle=1;" value="Manage Profile"><mxGeometry x="890" y="1040" width="300" height="72" as="geometry" /></mxCell><mxCell id="e34" edge="1" parent="1" source="n2" target="n25" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e35" edge="1" parent="1" source="n2" target="n26" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e36" edge="1" parent="1" source="n2" target="n27" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e37" edge="1" parent="1" source="n2" target="n28" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e38" edge="1" parent="1" source="n2" target="n29" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e39" edge="1" parent="1" source="n2" target="n30" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e40" edge="1" parent="1" source="n2" target="n31" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e41" edge="1" parent="1" source="n2" target="n32" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="e42" edge="1" parent="1" source="n2" target="n33" style="endArrow=none;html=1;strokeColor=#0e7a63;rounded=0;" value=""><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="n43" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11;fontStyle=1;" value="Save to Local Database (Room)
+always — offline-first"><mxGeometry x="630" y="650" width="240" height="100" as="geometry" /></mxCell><mxCell id="n44" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11;fontStyle=1;" value="Sync with Server
+only when device is online"><mxGeometry x="620" y="900" width="260" height="100" as="geometry" /></mxCell><mxCell id="e45" edge="1" parent="1" source="n8" target="n43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=open;html=1;dashed=1;fontColor=#33499c;fontSize=9;fontStyle=2;" value="&#171;include&#187;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="640" y="700" /></Array></mxGeometry></mxCell><mxCell id="e46" edge="1" parent="1" source="n29" target="n43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=open;html=1;dashed=1;fontColor=#0e7a63;fontSize=9;fontStyle=2;" value="&#171;include&#187;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="850" y="700" /></Array></mxGeometry></mxCell><mxCell id="e47" edge="1" parent="1" source="n26" target="n44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=open;html=1;dashed=1;fontColor=#0e7a63;fontSize=9;fontStyle=2;" value="&#171;include&#187;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1010" y="233" /><mxPoint x="930" y="233" /><mxPoint x="930" y="950" /></Array></mxGeometry></mxCell><mxCell id="e48" edge="1" parent="1" source="n6" target="n44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=open;html=1;dashed=1;fontColor=#33499c;fontSize=9;fontStyle=2;" value="&#171;include&#187;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="490" y="475" /><mxPoint x="570" y="475" /><mxPoint x="570" y="950" /></Array></mxGeometry></mxCell><mxCell id="e49" edge="1" parent="1" source="n30" target="n29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=open;html=1;dashed=1;fontColor=#565f52;fontSize=9;fontStyle=2;" value="&#171;extend&#187;"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e50" edge="1" parent="1" source="n11" target="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=open;html=1;dashed=1;fontColor=#565f52;fontSize=9;fontStyle=2;" value="&#171;extend&#187;"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="7_Fig31" name="7. Figure 3.1 - Login Auth">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n1" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontSize=12.5;fontStyle=1;" value="Start"><mxGeometry x="265" y="-4" width="170" height="48" as="geometry" /></mxCell><mxCell id="n2" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Login screen: enter email + password"><mxGeometry x="190" y="90" width="320" height="46" as="geometry" /></mxCell><mxCell id="e3" edge="1" parent="1" source="n1" target="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n4" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11.5;fontStyle=1;" value="Authenticate
+checks local Room DB first (offline)"><mxGeometry x="160" y="170" width="380" height="60" as="geometry" /></mxCell><mxCell id="e5" edge="1" parent="1" source="n2" target="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n6" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11.5;" value="Credentials valid?"><mxGeometry x="235.0" y="264.0" width="230" height="90" as="geometry" /></mxCell><mxCell id="e7" edge="1" parent="1" source="n4" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n8" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=10.5;" value="Show login error"><mxGeometry x="-110" y="344" width="220" height="46" as="geometry" /></mxCell><mxCell id="e9" edge="1" parent="1" source="n6" target="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e10" edge="1" parent="1" source="n8" target="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-150" y="367.0" /><mxPoint x="-150" y="113.0" /></Array></mxGeometry></mxCell><mxCell id="n11" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=9.5;" value="No local account found &amp;
+device online (HTTPS)?
+-&gt; recover via login.php,
+re-hash locally (PBKDF2)"><mxGeometry x="510" y="334" width="260" height="62" as="geometry" /></mxCell><mxCell id="e12" edge="1" parent="1" source="n4" target="n11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;dashed=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e13" edge="1" parent="1" source="n11" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;dashed=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n14" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11.5;" value="Determine role"><mxGeometry x="250.0" y="404.0" width="200" height="90" as="geometry" /></mxCell><mxCell id="e15" edge="1" parent="1" source="n6" target="n14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n16" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="Register (Sign Up)
+new account saved locally,
+best-effort pushed to server"><mxGeometry x="-330" y="80" width="230" height="62" as="geometry" /></mxCell><mxCell id="e17" edge="1" parent="1" source="n2" target="n16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;fontColor=#565f52;fontSize=10;" value="No account?"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e18" edge="1" parent="1" source="n16" target="n14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-215.0" y="449" /><mxPoint x="210.0" y="449" /></Array></mxGeometry></mxCell><mxCell id="n19" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#33499c;fontSize=9;fontStyle=1;dashed=1;" value="TEACHER SYSTEM
+Figure 3.2"><mxGeometry x="164" y="578" width="92" height="92" as="geometry" /></mxCell><mxCell id="n20" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0e7a63;fontSize=9;fontStyle=1;dashed=1;" value="STUDENT SYSTEM
+Figure 3.3"><mxGeometry x="444" y="578" width="92" height="92" as="geometry" /></mxCell><mxCell id="e21" edge="1" parent="1" source="n14" target="n19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=block;html=1;fontColor=#33499c;fontSize=10;" value="Teacher"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e22" edge="1" parent="1" source="n14" target="n20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Student"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="8_Fig32" name="8. Figure 3.2 - Teacher System">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1450" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n1" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#33499c;fontSize=9;fontStyle=1;dashed=1;" value="LOGIN / AUTH
+Figure 3.1"><mxGeometry x="284" y="-36" width="92" height="92" as="geometry" /></mxCell><mxCell id="n2" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=13;fontStyle=1;" value="Teacher Dashboard
+tabs: Dashboard, Classes, Analytics, Profile"><mxGeometry x="190" y="100" width="280" height="56" as="geometry" /></mxCell><mxCell id="e3" edge="1" parent="1" source="n1" target="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n4" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=12;fontStyle=1;align=left;spacingLeft=8;" value="Class Management
+- Create, Edit, Delete, Search
+- View Students (roster)"><mxGeometry x="170" y="190" width="320" height="78" as="geometry" /></mxCell><mxCell id="e5" edge="1" parent="1" source="n2" target="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n6" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Select a Class"><mxGeometry x="190" y="298" width="280" height="42" as="geometry" /></mxCell><mxCell id="e7" edge="1" parent="1" source="n4" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n8" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11.5;fontStyle=1;align=left;spacingLeft=8;" value="Lessons (default landing page)
+- Create, Edit, Delete, Search"><mxGeometry x="170" y="370" width="320" height="66" as="geometry" /></mxCell><mxCell id="e9" edge="1" parent="1" source="n6" target="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n10" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Select Lesson -&gt; Lesson Detail"><mxGeometry x="180" y="466" width="300" height="42" as="geometry" /></mxCell><mxCell id="e11" edge="1" parent="1" source="n8" target="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n12" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=10;fontStyle=1;fontColor=#b3453f;" value="&quot;Attendance&quot; button
+shows &quot;coming soon&quot; -
+NOT IMPLEMENTED"><mxGeometry x="560" y="516" width="220" height="50" as="geometry" /></mxCell><mxCell id="e13" edge="1" parent="1" source="n10" target="n12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;dashed=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n14" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="View Quizzes -&gt; Quiz List"><mxGeometry x="180" y="538" width="300" height="42" as="geometry" /></mxCell><mxCell id="e15" edge="1" parent="1" source="n10" target="n14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n16" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=12.5;fontStyle=1;align=left;spacingLeft=8;" value="Create / Edit Quiz
+title, instructions, time limit, passing score
+-&gt; Manage Questions (MCQ / Identification / Essay)
+-&gt; Publish (blocked until &gt;=1 question)"><mxGeometry x="160" y="610" width="340" height="108" as="geometry" /></mxCell><mxCell id="e17" edge="1" parent="1" source="n14" target="n16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n18" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;fontStyle=1;" value="Start Live Session
+direct device Wi-Fi,
+bypasses server - see Fig 3.4"><mxGeometry x="0" y="752" width="240" height="58" as="geometry" /></mxCell><mxCell id="n19" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;fontStyle=1;" value="View Results
+per-student score,
+correct/total, date"><mxGeometry x="420" y="752" width="240" height="58" as="geometry" /></mxCell><mxCell id="e20" edge="1" parent="1" source="n16" target="n18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c9922f;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e21" edge="1" parent="1" source="n16" target="n19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c9922f;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n22" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;fontStyle=1;" value="Grade Essay Answers
+teacher enters 0-100 score;
+auto-score covers MCQ+ID only"><mxGeometry x="420" y="840" width="240" height="62" as="geometry" /></mxCell><mxCell id="e23" edge="1" parent="1" source="n19" target="n22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n24" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=9;fontStyle=1;fontColor=#b3453f;" value="saved score is not yet
+shown back to the student - PARTIAL"><mxGeometry x="420" y="916" width="240" height="46" as="geometry" /></mxCell><mxCell id="e25" edge="1" parent="1" source="n22" target="n24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n26" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="Join Requests
+(via notification bell)"><mxGeometry x="0" y="840" width="240" height="76" as="geometry" /></mxCell><mxCell id="n27" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;" value="Approve or deny?"><mxGeometry x="25.0" y="941.0" width="190" height="90" as="geometry" /></mxCell><mxCell id="e28" edge="1" parent="1" source="n26" target="n27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n29" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10.5;fontStyle=1;" value="Approve
+membership created,
+synced to server"><mxGeometry x="-115.0" y="1057.0" width="190" height="56" as="geometry" /></mxCell><mxCell id="n30" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=10.5;fontStyle=1;" value="Deny
+marked denied
+(local only)"><mxGeometry x="165.0" y="1057.0" width="190" height="56" as="geometry" /></mxCell><mxCell id="e31" edge="1" parent="1" source="n27" target="n29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Approve"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e32" edge="1" parent="1" source="n27" target="n30" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="Deny"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n33" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="Notifications (bell icon)
+unified history - shared with Student"><mxGeometry x="160" y="1147.0" width="340" height="58" as="geometry" /></mxCell><mxCell id="e34" edge="1" parent="1" source="n29" target="n33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e35" edge="1" parent="1" source="n30" target="n33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n36" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;align=left;spacingLeft=8;" value="Analytics tab (&quot;Grades&quot; equivalent)
+avg score, submissions, per-student list
+&quot;attendance rate&quot; field always 0% -
+no attendance-marking feature exists"><mxGeometry x="160" y="1235.0" width="340" height="92" as="geometry" /></mxCell><mxCell id="e37" edge="1" parent="1" source="n33" target="n36" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n38" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Profile tab - view / logout"><mxGeometry x="190" y="1357.0" width="280" height="42" as="geometry" /></mxCell><mxCell id="e39" edge="1" parent="1" source="n36" target="n38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n40" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#565f52;fontSize=9;fontStyle=1;dashed=1;" value="SYNC ARCHITECTURE
+Figure 3.4"><mxGeometry x="284" y="1439.0" width="92" height="92" as="geometry" /></mxCell><mxCell id="e41" edge="1" parent="1" source="n38" target="n40" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="9_Fig33" name="9. Figure 3.3 - Student System">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n1" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0e7a63;fontSize=9;fontStyle=1;dashed=1;" value="LOGIN / AUTH
+Figure 3.1"><mxGeometry x="284" y="-36" width="92" height="92" as="geometry" /></mxCell><mxCell id="n2" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=13;fontStyle=1;" value="Student Dashboard
+tabs: Dashboard, My Progress, Profile"><mxGeometry x="190" y="100" width="280" height="56" as="geometry" /></mxCell><mxCell id="e3" edge="1" parent="1" source="n1" target="n2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n4" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="My Classes, Join Quiz (Live)
+buttons on the Dashboard tab"><mxGeometry x="160" y="190" width="340" height="58" as="geometry" /></mxCell><mxCell id="e5" edge="1" parent="1" source="n2" target="n4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n6" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Join Class: enter class code"><mxGeometry x="180" y="278" width="300" height="42" as="geometry" /></mxCell><mxCell id="e7" edge="1" parent="1" source="n4" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n8" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;" value="Class found? (server lookup)
+requires connectivity"><mxGeometry x="220.0" y="350.0" width="220" height="90" as="geometry" /></mxCell><mxCell id="e9" edge="1" parent="1" source="n6" target="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n10" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=9.5;" value="Show error, try again"><mxGeometry x="-130" y="410" width="200" height="46" as="geometry" /></mxCell><mxCell id="e11" edge="1" parent="1" source="n8" target="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e12" edge="1" parent="1" source="n10" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="-170" y="433.0" /><mxPoint x="-170" y="299.0" /></Array></mxGeometry></mxCell><mxCell id="n13" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10.5;fontStyle=1;" value="Send Join Request -&gt; wait for teacher
+saved locally + pushed to server;
+status visible via Notifications"><mxGeometry x="160" y="470" width="340" height="70" as="geometry" /></mxCell><mxCell id="e14" edge="1" parent="1" source="n8" target="n13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n15" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11;" value="Teacher approves?"><mxGeometry x="230.0" y="570.0" width="200" height="90" as="geometry" /></mxCell><mxCell id="e16" edge="1" parent="1" source="n13" target="n15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n17" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=10;" value="Not added to class"><mxGeometry x="-130" y="630" width="200" height="44" as="geometry" /></mxCell><mxCell id="e18" edge="1" parent="1" source="n15" target="n17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n19" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=11;" value="Added to My Classes"><mxGeometry x="160" y="680" width="340" height="42" as="geometry" /></mxCell><mxCell id="e20" edge="1" parent="1" source="n15" target="n19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n21" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;align=left;spacingLeft=8;" value="Select a Class
+- (tap row) -&gt; Lessons   - Leave Class"><mxGeometry x="170" y="752" width="320" height="58" as="geometry" /></mxCell><mxCell id="e22" edge="1" parent="1" source="n19" target="n21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n23" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11.5;fontStyle=1;" value="Lessons -&gt; View Lesson
+Lesson Detail: content + attachments"><mxGeometry x="170" y="840" width="320" height="58" as="geometry" /></mxCell><mxCell id="e24" edge="1" parent="1" source="n21" target="n23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n25" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11.5;" value="Quiz available?"><mxGeometry x="230.0" y="928.0" width="200" height="90" as="geometry" /></mxCell><mxCell id="e26" edge="1" parent="1" source="n23" target="n25" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n27" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontSize=10.5;" value="No quiz yet"><mxGeometry x="620" y="947" width="180" height="52" as="geometry" /></mxCell><mxCell id="e28" edge="1" parent="1" source="n25" target="n27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;fontColor=#565f52;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n29" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;" value="Live session active now?"><mxGeometry x="220.0" y="1028.0" width="220" height="90" as="geometry" /></mxCell><mxCell id="e30" edge="1" parent="1" source="n25" target="n29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n31" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#c9922f;fontSize=10.5;fontStyle=1;dashed=1;" value="Join Live Quiz
+enter teacher's IP; device-to-device
+over Wi-Fi - see Fig 3.4"><mxGeometry x="630" y="1058" width="280" height="66" as="geometry" /></mxCell><mxCell id="e32" edge="1" parent="1" source="n29" target="n31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c9922f;endArrow=block;html=1;dashed=1;fontColor=#c9922f;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n33" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=10.5;" value="Already submitted?
+DB-enforced, 1 per student"><mxGeometry x="210.0" y="1138.0" width="240" height="90" as="geometry" /></mxCell><mxCell id="e34" edge="1" parent="1" source="n29" target="n33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n35" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7d9d6;strokeColor=#b3453f;fontSize=9.5;" value="Blocked: already taken"><mxGeometry x="-130" y="1208" width="200" height="44" as="geometry" /></mxCell><mxCell id="e36" edge="1" parent="1" source="n33" target="n35" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b3453f;endArrow=block;html=1;fontColor=#b3453f;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n37" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10.5;fontStyle=1;align=left;spacingLeft=8;" value="Take Quiz - MCQ / Identification / Essay
+answer all questions (required)
+-&gt; Submit -&gt; auto-score from MCQ+ID only
+(essay excluded) -&gt; save locally -&gt; sync"><mxGeometry x="160" y="1238" width="340" height="92" as="geometry" /></mxCell><mxCell id="e38" edge="1" parent="1" source="n33" target="n37" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;fontColor=#0e7a63;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n39" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="View Result
+score %, correct count, pass/fail"><mxGeometry x="160" y="1360" width="340" height="58" as="geometry" /></mxCell><mxCell id="e40" edge="1" parent="1" source="n37" target="n39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n41" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="Notifications (bell icon)
+unified history - shared with Teacher"><mxGeometry x="160" y="1452" width="340" height="58" as="geometry" /></mxCell><mxCell id="e42" edge="1" parent="1" source="n39" target="n41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n43" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;fontStyle=1;align=left;spacingLeft=8;" value="My Progress tab (&quot;Grades&quot; equivalent)
+summary stats, score trend chart,
+quiz history - per class or overall
+&quot;attendance rate&quot; always 0% (not tracked)"><mxGeometry x="160" y="1540" width="340" height="92" as="geometry" /></mxCell><mxCell id="e44" edge="1" parent="1" source="n41" target="n43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n45" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=11;" value="Profile tab - view / logout"><mxGeometry x="190" y="1662" width="280" height="42" as="geometry" /></mxCell><mxCell id="e46" edge="1" parent="1" source="n43" target="n45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n47" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#565f52;fontSize=9;fontStyle=1;dashed=1;" value="SYNC ARCHITECTURE
+Figure 3.4"><mxGeometry x="284" y="1744" width="92" height="92" as="geometry" /></mxCell><mxCell id="e48" edge="1" parent="1" source="n45" target="n47" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="10_Fig34" name="10. Figure 3.4 - Sync Architecture">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n1" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#33499c;fontSize=9;fontStyle=1;dashed=1;" value="TEACHER SYSTEM
+Figure 3.2"><mxGeometry x="214" y="-36" width="92" height="92" as="geometry" /></mxCell><mxCell id="n2" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0e7a63;fontSize=9;fontStyle=1;dashed=1;" value="STUDENT SYSTEM
+Figure 3.3"><mxGeometry x="494" y="-36" width="92" height="92" as="geometry" /></mxCell><mxCell id="n3" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10.5;" value="Any user action from either system"><mxGeometry x="240" y="90" width="320" height="42" as="geometry" /></mxCell><mxCell id="e4" edge="1" parent="1" source="n1" target="n3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e5" edge="1" parent="1" source="n2" target="n3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n6" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontSize=11;fontStyle=1;" value="Always saved to local Room database first"><mxGeometry x="210" y="162" width="380" height="50" as="geometry" /></mxCell><mxCell id="e7" edge="1" parent="1" source="n3" target="n6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n8" parent="1" vertex="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fbf1da;strokeColor=#c9922f;fontSize=11.5;" value="Device online?
+NetworkMonitor"><mxGeometry x="290.0" y="242.0" width="220" height="90" as="geometry" /></mxCell><mxCell id="e9" edge="1" parent="1" source="n6" target="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n10" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10.5;fontStyle=1;" value="Continue working offline
+row flagged pending_sync;
+retried automatically on reconnect"><mxGeometry x="-210" y="297" width="280" height="70" as="geometry" /></mxCell><mxCell id="e11" edge="1" parent="1" source="n8" target="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;fontColor=#565f52;fontSize=10;" value="No"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n12" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dde2f4;strokeColor=#33499c;fontSize=10.5;fontStyle=1;" value="SyncManager pushes/pulls via
+REST API (Retrofit / HTTPS)"><mxGeometry x="580" y="297" width="300" height="60" as="geometry" /></mxCell><mxCell id="e13" edge="1" parent="1" source="n8" target="n12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#33499c;endArrow=block;html=1;fontColor=#33499c;fontSize=10;" value="Yes"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n14" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#20261f;fontSize=10.5;" value="PHP backend validates request"><mxGeometry x="580" y="372" width="300" height="50" as="geometry" /></mxCell><mxCell id="e15" edge="1" parent="1" source="n12" target="n14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n16" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d7ece2;strokeColor=#0e7a63;fontSize=10.5;fontStyle=1;" value="PostgreSQL (classroom_sync)"><mxGeometry x="580" y="448" width="300" height="50" as="geometry" /></mxCell><mxCell id="e17" edge="1" parent="1" source="n14" target="n16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7b8373;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="n18" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#565f52;fontSize=10;fontStyle=1;dashed=1;" value="Android never talks to
+PostgreSQL directly - always
+through this REST API"><mxGeometry x="240" y="448" width="320" height="66" as="geometry" /></mxCell><mxCell id="n19" parent="1" vertex="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#eef0ea;strokeColor=#20261f;fontSize=12;fontStyle=1;" value="End"><mxGeometry x="340" y="544" width="120" height="52" as="geometry" /></mxCell><mxCell id="e20" edge="1" parent="1" source="n16" target="n19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0e7a63;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell><mxCell id="e21" edge="1" parent="1" source="n10" target="n19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#565f52;endArrow=block;html=1;" value=""><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
