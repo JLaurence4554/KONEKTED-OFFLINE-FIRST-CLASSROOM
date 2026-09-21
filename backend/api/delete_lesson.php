@@ -44,11 +44,24 @@ try {
         @unlink(ATTACHMENTS_DIR . '/' . $lesson['attachment_path']);
     }
 
-    $stmt = $pdo->prepare('DELETE FROM lessons WHERE id = ?');
-    $stmt->execute([$lessonId]);
+    // quizzes/questions/quiz_results don't cascade on the DB side, so a lesson
+    // that has any quizzes can't be deleted until they are - dependents first.
+    $pdo->beginTransaction();
+    $pdo->prepare(
+        'DELETE FROM quiz_results WHERE quiz_id IN (SELECT id FROM quizzes WHERE lesson_id = ?)'
+    )->execute([$lessonId]);
+    $pdo->prepare(
+        'DELETE FROM questions WHERE quiz_id IN (SELECT id FROM quizzes WHERE lesson_id = ?)'
+    )->execute([$lessonId]);
+    $pdo->prepare('DELETE FROM quizzes WHERE lesson_id = ?')->execute([$lessonId]);
+    $pdo->prepare('DELETE FROM lessons WHERE id = ?')->execute([$lessonId]);
+    $pdo->commit();
 
     send_json(true, 'Lesson deleted.', null);
 } catch (Throwable $e) {
+    if (isset($pdo) && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     error_log('delete_lesson.php error: ' . $e->getMessage());
     send_json(false, 'Unable to delete the lesson.', null, 500);
 }
