@@ -21,7 +21,7 @@ if ($email === '' || $password === '') {
 
 try {
     $pdo = get_db_connection();
-    $stmt = $pdo->prepare('SELECT id, full_name, email, role, password_hash FROM users WHERE email = ?');
+    $stmt = $pdo->prepare('SELECT id, full_name, email, role, password_hash, profile_picture FROM users WHERE email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -37,6 +37,10 @@ try {
         'fullName' => $user['full_name'],
         'email'    => $user['email'],
         'role'     => $user['role'],
+        // So a reinstall or a new phone gets the account's photo back too.
+        'profilePictureUrl' => !empty($user['profile_picture'])
+            ? public_file_url($user['profile_picture'])
+            : null,
     ]);
 } catch (Throwable $e) {
     error_log('login.php error: ' . $e->getMessage());

@@ -26,6 +26,10 @@ CREATE TABLE IF NOT EXISTS users (
 -- Safe to re-run on a database created before this column existed.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255);
 
+-- Stored file name (in the attachments folder) of the account's profile
+-- picture, set by upload_profile_picture.php. NULL = no picture.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_picture VARCHAR(255);
+
 -- Classes table
 CREATE TABLE IF NOT EXISTS classes (
     id SERIAL PRIMARY KEY,

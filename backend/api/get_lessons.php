@@ -25,31 +25,8 @@ try {
          FROM lesson_attachments WHERE lesson_id = ? ORDER BY order_index ASC, id ASC'
     );
 
-    // Build the response, turning the server-side relative attachment path into
-    // a full download URL the client can pass to download_attachment.php.
-    //
-    // HTTP_ORIGIN is a browser-only header - Retrofit/OkHttp (the Android app)
-    // never sends one, so that branch never actually fires for a real client
-    // and always fell through to the REQUEST_URI fallback below. That fallback
-    // is itself broken for this app: REQUEST_URI is a path only (no scheme or
-    // host), so the resulting "base URL" was something like "/classroom-api" -
-    // schemeless, so Uri.parse()+ACTION_VIEW on the Android side could never
-    // resolve it. Build a real absolute URL from the host instead, honoring
-    // X-Forwarded-Proto since ngrok terminates HTTPS at its edge and forwards
-    // to XAMPP over plain HTTP - without that header check the scheme would
-    // wrongly come out as "http" even when the app reached this over https.
-    $scheme = 'http';
-    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-        $scheme = strtolower(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]);
-    } elseif (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-        $scheme = 'https';
-    }
-    $host = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? 'localhost');
-    // SCRIPT_NAME (unlike REQUEST_URI) has no query string to worry about, e.g.
-    // "/classroom-api/api/get_lessons.php" -> "/classroom-api".
-    $scriptDir = rtrim(preg_replace('#/api/[^/]+$#', '', $_SERVER['SCRIPT_NAME'] ?? ''), '/');
-    $baseUrl = $scheme . '://' . $host . $scriptDir;
-
+    // Build the response, turning each server-side relative attachment path
+    // into a full download URL (see public_file_url in common.php).
     $lessons = [];
     foreach ($rows as $row) {
         $lesson = [
@@ -73,7 +50,7 @@ try {
                 // Only IMAGE/FILE have a stored file - VIDEO_LINK's "name"
                 // field already holds the raw URL, nothing to download.
                 'url'         => !empty($a['file_path'])
-                                    ? $baseUrl . '/api/download_attachment.php?file=' . rawurlencode($a['file_path'])
+                                    ? public_file_url($a['file_path'])
                                     : null,
             ];
         }

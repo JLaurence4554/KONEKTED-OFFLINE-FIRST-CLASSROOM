@@ -23,6 +23,31 @@ function send_json(bool $success, string $message, $data = null, int $httpCode =
     exit;
 }
 
+/**
+ * Full download URL (via download_attachment.php) for a file stored in
+ * ATTACHMENTS_DIR - lesson attachments and profile pictures.
+ *
+ * Built from the request's own host rather than HTTP_ORIGIN (a browser-only
+ * header the Android app never sends) or REQUEST_URI (a path only - no
+ * scheme or host - which Uri.parse() + ACTION_VIEW on Android can't
+ * resolve). Honors X-Forwarded-Proto since ngrok terminates HTTPS at its
+ * edge and forwards to XAMPP over plain HTTP; without that check the scheme
+ * would wrongly come out as "http" even when the app reached this over https.
+ */
+function public_file_url(string $storedName): string {
+    $scheme = 'http';
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        $scheme = strtolower(trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]));
+    } elseif (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        $scheme = 'https';
+    }
+    $host = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? 'localhost');
+    // SCRIPT_NAME (unlike REQUEST_URI) has no query string to worry about, e.g.
+    // "/classroom-api/api/get_lessons.php" -> "/classroom-api".
+    $scriptDir = rtrim(preg_replace('#/api/[^/]+$#', '', $_SERVER['SCRIPT_NAME'] ?? ''), '/');
+    return $scheme . '://' . $host . $scriptDir . '/api/download_attachment.php?file=' . rawurlencode($storedName);
+}
+
 /** Reads and JSON-decodes the request body (for POST endpoints). Empty/invalid body -> empty array. */
 function read_json_body(): array {
     $raw = file_get_contents('php://input');
