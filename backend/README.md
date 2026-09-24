@@ -146,10 +146,20 @@ the `debug` (LAN) build type.
   `common.php`, or proper token-based auth tied to the app's existing
   login) so these endpoints aren't open to the public internet
   unprotected.
-- **No passwords ever reach this backend.** The `users` table here only
-  stores name/email/role — it's an identity cache, not an account store.
-  Login/password verification stays entirely on-device (Room + PBKDF2, as
-  it already was) and never crosses the network.
+- **Passwords.** `register.php` / `login.php` store and check a
+  `password_hash()` of each password (never the password itself), so a
+  reinstalled or second phone can log in. Every endpoint is still unprotected
+  beyond "the request names an email that exists" (see the first note).
+- **Uploaded files must never be served or run directly.** The
+  `attachments/` folder (lesson files and profile pictures) sits inside the
+  document root on XAMPP. It is only meant to be read through
+  `api/download_attachment.php`. `ensure_attachments_dir()` writes a deny-all
+  `.htaccess` there (Apache), and uploads are limited to a list of harmless
+  extensions in `common.php` (anything else is stored as `.bin`), because a
+  file stored as `.php` used to be runnable by opening its address. On
+  nginx, add `location /attachments/ { deny all; }` yourself, and better still
+  move the folder outside the document root (`ATTACHMENTS_DIR` in
+  `config/database.php`).
 - **`config/database.php` has an `.htaccess` denying direct HTTP access**
   to the whole `config/` folder, so the credentials file can't be fetched
   directly even if someone knows/guesses its URL. This only works on

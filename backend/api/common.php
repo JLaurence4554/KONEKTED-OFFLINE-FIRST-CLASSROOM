@@ -87,16 +87,51 @@ function get_or_create_user(PDO $pdo, string $fullName, string $email, string $r
  * it without require_once-ing an entire other endpoint's request handling.
  */
 function store_uploaded_attachment(string $tmpPath, string $originalName): string {
-    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-    $safeExt = preg_match('/^[a-zA-Z0-9]+$/', $extension) ? $extension : '';
-    $uniqueName = sprintf('%d_%s%s',
-        time(),
-        preg_replace('/[^a-zA-Z0-9._-]/', '_', pathinfo($originalName, PATHINFO_FILENAME)),
-        $safeExt !== '' ? '.' . $safeExt : ''
-    );
+    ensure_attachments_dir();
+    $uniqueName = unique_attachment_name($originalName);
     $dest = ATTACHMENTS_DIR . '/' . $uniqueName;
     if (!move_uploaded_file($tmpPath, $dest)) {
         throw new RuntimeException('Failed to store uploaded attachment.');
     }
     return $uniqueName;
+}
+
+/**
+ * Extensions an uploaded file may keep. Anything else is stored as ".bin".
+ * Before this, any letters-and-digits extension was kept - including ".php",
+ * so anyone who knew a teacher's email could upload a script into a folder the
+ * web server serves and run it by opening its address. The app is unaffected:
+ * it opens a downloaded file using the type kept in the database, not the
+ * extension of the stored copy.
+ */
+const SAFE_ATTACHMENT_EXTENSIONS = [
+    'pdf', 'doc', 'docx', 'dot', 'dotx', 'odt', 'rtf', 'txt', 'md', 'csv',
+    'ppt', 'pptx', 'pps', 'ppsx', 'odp',
+    'xls', 'xlsx', 'ods',
+    'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic', 'heif',
+    'mp3', 'm4a', 'wav', 'ogg', 'aac',
+    'mp4', 'm4v', 'mov', '3gp', 'webm', 'mkv', 'avi',
+    'zip',
+];
+
+/** The lower-case extension a stored copy of this file may carry ("bin" when it isn't a known-harmless type). */
+function safe_attachment_extension(string $originalName): string {
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    return in_array($extension, SAFE_ATTACHMENT_EXTENSIONS, true) ? $extension : 'bin';
+}
+
+/**
+ * "<time>_<name>_<random>.<safe extension>". The name keeps letters, digits, "_"
+ * and "-" only - dots go too, so "evil.php.jpg" can't leave a ".php" in the
+ * middle (some Apache setups run that) - and the random part means two files
+ * uploaded in the same second never collide and stored names can't be guessed.
+ */
+function unique_attachment_name(string $originalName): string {
+    $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+    return sprintf('%d_%s_%s.%s',
+        time(),
+        substr($base, 0, 80),
+        bin2hex(random_bytes(4)),
+        safe_attachment_extension($originalName)
+    );
 }
