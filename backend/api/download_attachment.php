@@ -2,9 +2,17 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/common.php';
 
+// Hands one stored file (a lesson attachment or a profile picture) to a
+// logged-in person who is allowed to have it - see may_download_file() in
+// common.php. Before this, anyone holding the address could download any
+// file. The app sends its login token in the Authorization header when it
+// downloads (FileUtil on Android).
+
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     send_json(false, 'Method not allowed.', null, 405);
 }
+
+$pdo = open_authenticated(null, $auth);
 
 $file = $_GET['file'] ?? '';
 
@@ -14,6 +22,10 @@ if ($file === '' || preg_match('/[\/\\\\]/', $file) || strpos($file, '..') !== f
 
 try {
     ensure_attachments_dir();
+
+    if (!may_download_file($pdo, $auth, $file)) {
+        send_forbidden('You do not have access to this file.');
+    }
 
     $fullPath = ATTACHMENTS_DIR . '/' . $file;
     if (!is_file($fullPath)) {

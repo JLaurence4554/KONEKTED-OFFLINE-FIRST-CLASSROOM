@@ -8,31 +8,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $lessonId    = (int) ($input['lessonId'] ?? 0);
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($lessonId === 0 || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($lessonId === 0) {
     send_json(false, 'Missing required fields.');
 }
 
 try {
     ensure_attachments_dir();
-    $pdo = get_db_connection();
 
     // Only the owning teacher may delete the lesson.
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare(
         'SELECT l.id, l.attachment_path, l.class_id
          FROM lessons l
          JOIN classes c ON c.id = l.class_id
          WHERE l.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$lessonId, $teacher['id']]);
+    $stmt->execute([$lessonId, $auth['id']]);
     $lesson = $stmt->fetch();
     if (!$lesson) {
         send_json(false, 'Lesson not found or not owned by you.');

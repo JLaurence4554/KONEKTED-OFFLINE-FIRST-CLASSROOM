@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $maxBytes = 5 * 1024 * 1024;
 $allowedTypes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
 
+// The photo belongs to the logged-in account (see "Login protection" in
+// common.php); an email in the request is only checked against it.
+$pdo = open_authenticated(null, $auth);
+
 $hasFile = isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK;
 if ($hasFile) {
     $email  = strtolower(trim($_POST['email'] ?? ''));
@@ -30,20 +34,20 @@ if ($hasFile) {
     $remove = !empty($input['remove']);
 }
 
-if ($email === '' || (!$hasFile && !$remove)) {
-    send_json(false, 'An email and a photo (or "remove") are required.');
+assert_same_account($auth, $email);
+
+if (!$hasFile && !$remove) {
+    send_json(false, 'A photo (or "remove") is required.');
 }
 
-$pdo = null;
 $newName = null;
 try {
     ensure_attachments_dir();
-    $pdo = get_db_connection();
 
-    $stmt = $pdo->prepare('SELECT id, password_hash, profile_picture FROM users WHERE email = ?');
-    $stmt->execute([$email]);
+    $stmt = $pdo->prepare('SELECT id, profile_picture FROM users WHERE id = ?');
+    $stmt->execute([$auth['id']]);
     $user = $stmt->fetch();
-    if (!$user || empty($user['password_hash'])) {
+    if (!$user) {
         send_json(false, 'Account not found.');
     }
 

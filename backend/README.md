@@ -138,18 +138,50 @@ the `debug` (LAN) build type.
 
 ## 4. Security notes (read before deploying anywhere real)
 
-- **No authentication on this API yet.** Anyone who can reach these
-  endpoints and knows (or guesses) a class code can query it, and anyone
-  can claim any name/email when joining. This was out of scope for "Class
-  + Join sync" per the spec, but it's a real gap — before any real
-  deployment, add an auth layer (e.g. an API key header checked in
-  `common.php`, or proper token-based auth tied to the app's existing
-  login) so these endpoints aren't open to the public internet
-  unprotected.
+- **Login protection (tokens).** Every endpoint except `register.php` and
+  `login.php` needs a login token. Those two hand one out (`kt_` + 64 hex
+  characters); the app sends it as `Authorization: Bearer <token>` (or
+  `X-Auth-Token`). The server stores only its SHA-256 (table `auth_tokens`),
+  so a database leak doesn't leak logins. Tokens last 90 days (renewed when
+  used), each user keeps their newest 10 (one per phone), and
+  `logout.php` ends one (or all, with `"allDevices": true`).
+  - The server works out WHO is asking from the token and never trusts an
+    email in the request body; a body email that isn't the token's account is
+    refused (403 `ACCOUNT_MISMATCH`). Teachers can only touch their own
+    classes, students only classes they belong to (403 otherwise).
+  - Status codes: `401` no valid token (`code: AUTH_REQUIRED`), `403` wrong
+    role / not yours, `429` too many attempts (`RATE_LIMITED`), `426` plain
+    HTTP refused (`HTTPS_REQUIRED`). Everything else keeps the old
+    "HTTP 200 + `success:false`" convention.
+  - Rate limits (table `login_attempts`): 8 wrong passwords per email and 100
+    per IP per 15 minutes; 30 sign-ups per IP per hour. Unknown emails take
+    as long as real ones to answer, so login can't be used to find out which
+    emails have accounts.
+  - The auth tables are in `schema.sql`, and also created automatically on
+    first use, so upgrading an existing database needs no manual step.
+  - **Apache:** `api/.htaccess` passes the `Authorization` header through to
+    PHP. **nginx / PHP-FPM:** add `fastcgi_param HTTP_AUTHORIZATION
+    $http_authorization;` to the PHP location (the app also sends
+    `X-Auth-Token` as a fallback).
+  - **Settings** (environment variables, all optional; defaults are the
+    XAMPP values in `config/database.php`): `KONEKTED_DB_HOST`,
+    `KONEKTED_DB_PORT`, `KONEKTED_DB_NAME`, `KONEKTED_DB_USER`,
+    `KONEKTED_DB_PASS`; `KONEKTED_REQUIRE_HTTPS=1` refuses plain HTTP (use it
+    on a real server); `KONEKTED_TRUST_PROXY=1` trusts `X-Forwarded-For` /
+    `X-Forwarded-Proto` from a reverse proxy or ngrok (only set it when one
+    really is in front, otherwise anyone can fake their address).
+  - **Test it:** `C:\xampp\php\php.exe backend\tests\api_test.php` builds a
+    throwaway database and web server, and checks every endpoint both as the
+    app uses it and as an attacker would (no login, someone else's login, the
+    wrong role, another person's class...). It never touches real data.
+  - **Known limits:** sign-up doesn't verify the email address, so anyone can
+    claim an email that has no account yet; there is no password reset yet;
+    `get_quizzes.php` still returns correct answers (to class members) and
+    unpublished drafts, since the app grades on the phone.
 - **Passwords.** `register.php` / `login.php` store and check a
   `password_hash()` of each password (never the password itself), so a
-  reinstalled or second phone can log in. Every endpoint is still unprotected
-  beyond "the request names an email that exists" (see the first note).
+  reinstalled or second phone can log in. Old app versions (before login
+  tokens) can no longer sync against this server; reinstall the current app.
 - **Uploaded files must never be served or run directly.** The
   `attachments/` folder (lesson files and profile pictures) sits inside the
   document root on XAMPP. It is only meant to be read through

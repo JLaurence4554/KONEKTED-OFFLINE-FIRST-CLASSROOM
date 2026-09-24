@@ -6,23 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
-$studentEmail = trim($_GET['studentEmail'] ?? '');
-
-if ($studentEmail === '') {
-    send_json(false, 'Missing studentEmail parameter.');
-}
+// The student is the logged-in account (see "Login protection" in common.php);
+// a studentEmail parameter is only checked against it.
+$pdo = open_authenticated('Student', $auth);
+assert_same_account($auth, $_GET['studentEmail'] ?? '');
 
 try {
-    $pdo = get_db_connection();
-
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND role = 'Student'");
-    $stmt->execute([$studentEmail]);
-    $userRow = $stmt->fetch();
-    if (!$userRow) {
-        send_json(true, 'No classes found.', ['classes' => []]);
-        return;
-    }
-    $studentId = (int) $userRow['id'];
+    $studentId = $auth['id'];
 
     $stmt = $pdo->prepare('
         SELECT c.id, c.class_name, c.subject, c.section,

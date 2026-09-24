@@ -4,9 +4,16 @@ require_once __DIR__ . '/common.php';
 
 // Server-side counterpart to UserRepository.register() on Android. The app
 // already creates the account locally and lets the person straight in
-// (offline-first) - this call is a best-effort background push so the same
-// account can be recovered later via login.php (e.g. after a reinstall, or
-// on a different device), instead of existing only in that one app install.
+// (offline-first) - this call puts the same account on the server so it can
+// be recovered later via login.php (a reinstall, a different device), and it
+// returns the login TOKEN every other endpoint now requires (see "Login
+// protection" in common.php).
+//
+// The app also calls this at login for an account that only exists on the
+// phone (created offline, or before the server knew about it) - it has the
+// password the person just typed, which is what makes the server account.
+//
+// Thirty or more sign-ups an hour from one address are refused (HTTP 429).
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     send_json(false, 'Method not allowed.', null, 405);
@@ -27,6 +34,7 @@ if (strlen($password) < 6) {
 
 try {
     $pdo = get_db_connection();
+    throttle_or_die($pdo, 'register', $email);
 
     $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE email = ?');
     $stmt->execute([$email]);
@@ -42,19 +50,25 @@ try {
         if (!empty($existing['password_hash'])) {
             // A real account already claimed this email - can't silently
             // take it over just because someone posts a matching email.
+            record_attempt($pdo, 'register', $email, false);
             send_json(false, 'An account with this email already exists.');
         }
         // A placeholder identity row (email/name cache only, no password) -
         // claim it instead of inserting a second row, since email is UNIQUE.
         $stmt = $pdo->prepare('UPDATE users SET full_name = ?, role = ?, password_hash = ? WHERE id = ?');
         $stmt->execute([$fullName, $role, $hash, $existing['id']]);
-        send_json(true, 'Account registered.', ['serverId' => (int) $existing['id']]);
-        return;
+        $userId = (int) $existing['id'];
+    } else {
+        $stmt = $pdo->prepare('INSERT INTO users (full_name, email, role, password_hash) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$fullName, $email, $role, $hash]);
+        $userId = (int) $pdo->lastInsertId();
     }
 
-    $stmt = $pdo->prepare('INSERT INTO users (full_name, email, role, password_hash) VALUES (?, ?, ?, ?)');
-    $stmt->execute([$fullName, $email, $role, $hash]);
-    send_json(true, 'Account registered.', ['serverId' => (int) $pdo->lastInsertId()]);
+    record_attempt($pdo, 'register', $email, true);
+    send_json(true, 'Account registered.', [
+        'serverId' => $userId,
+        'token'    => issue_auth_token($pdo, $userId),
+    ]);
 } catch (Throwable $e) {
     error_log('register.php error: ' . $e->getMessage());
     send_json(false, 'Unable to connect to the server. Please try again.', null, 500);

@@ -6,13 +6,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
+// Any logged-in person may ask, but only the lesson's class's teacher or one
+// of its students gets its quizzes (see "Login protection" in common.php).
+$pdo = open_authenticated(null, $auth);
+
 $lessonId = (int) ($_GET['lessonId'] ?? 0);
 if ($lessonId === 0) {
     send_json(false, 'lessonId is required.');
 }
 
 try {
-    $pdo = get_db_connection();
+    $stmt = $pdo->prepare('SELECT class_id FROM lessons WHERE id = ?');
+    $stmt->execute([$lessonId]);
+    $lessonRow = $stmt->fetch();
+    if (!$lessonRow) {
+        // No such lesson (it was deleted): nothing to return, same as before.
+        send_json(true, 'Quizzes fetched.', ['quizzes' => []]);
+    }
+    if (class_role($pdo, $auth, (int) $lessonRow['class_id']) === null) {
+        send_forbidden('You do not have access to this lesson.');
+    }
+
     $stmt = $pdo->prepare(
         'SELECT id, lesson_id, title, instructions, time_limit_minutes, passing_score, status, created_at
          FROM quizzes WHERE lesson_id = ? ORDER BY created_at DESC'

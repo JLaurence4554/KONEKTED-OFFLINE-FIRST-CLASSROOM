@@ -17,26 +17,22 @@ $studentName  = trim($input['studentName'] ?? '');
 $studentEmail = trim($input['studentEmail'] ?? '');
 $status       = trim($input['status'] ?? '');
 $date         = trim($input['date'] ?? '');
-$teacherEmail = trim($input['teacherEmail'] ?? '');
+
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it. studentEmail is
+// the student being marked, not the sender.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
 
 $validStatuses = ['Present', 'Absent', 'Late', 'Excused'];
-if ($classId === 0 || $studentEmail === '' || $date === '' || $teacherEmail === '' || !in_array($status, $validStatuses, true)) {
+if ($classId === 0 || $studentEmail === '' || $date === '' || !in_array($status, $validStatuses, true)) {
     send_json(false, 'Missing or invalid fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-
     // Verify the teacher owns this class
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare('SELECT id FROM classes WHERE id = ? AND teacher_id = ?');
-    $stmt->execute([$classId, $teacher['id']]);
+    $stmt->execute([$classId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'You do not own this class.');
     }

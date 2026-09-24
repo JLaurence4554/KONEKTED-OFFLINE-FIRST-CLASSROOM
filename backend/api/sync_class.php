@@ -12,16 +12,19 @@ $subject     = trim($input['subject'] ?? '');
 $section     = trim($input['section'] ?? '');
 $schoolYear  = trim($input['schoolYear'] ?? '');
 $classCode   = strtoupper(trim($input['classCode'] ?? ''));
-$teacherName = trim($input['teacherName'] ?? '');
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($className === '' || $classCode === '' || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in
+// common.php); teacherName / teacherEmail in the request are no longer used to
+// decide who is asking - an email that isn't the logged-in account's is refused.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($className === '' || $classCode === '') {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-    $teacherId = get_or_create_user($pdo, $teacherName, $teacherEmail, 'Teacher');
+    $teacherId = $auth['id'];
 
     $stmt = $pdo->prepare('SELECT id, teacher_id FROM classes WHERE class_code = ?');
     $stmt->execute([$classCode]);

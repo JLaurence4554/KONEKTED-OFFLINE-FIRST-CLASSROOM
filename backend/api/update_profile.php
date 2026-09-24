@@ -7,36 +7,29 @@ require_once __DIR__ . '/common.php';
 // other entity in this project) and calls this only to keep the
 // server-backed copy in sync, so a name change follows the account through
 // login.php's account-recovery path too (reinstall, new device).
+//
+// It changes the logged-in account's name (see "Login protection" in
+// common.php); an email in the request is only checked against that account.
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
-$input    = read_json_body();
-$email    = strtolower(trim($input['email'] ?? ''));
-$fullName = trim($input['fullName'] ?? '');
+$pdo = open_authenticated(null, $auth);
 
-if ($email === '' || $fullName === '') {
-    send_json(false, 'Email and full name are required.');
+$input    = read_json_body();
+$fullName = trim($input['fullName'] ?? '');
+assert_same_account($auth, $input['email'] ?? '');
+
+if ($fullName === '') {
+    send_json(false, 'Full name is required.');
 }
 
 try {
-    $pdo = get_db_connection();
-    $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    // Same rule login.php uses: a NULL password_hash means this row is only
-    // an identity cache (see schema.sql), never an actual registered
-    // account - nothing to update.
-    if (!$user || empty($user['password_hash'])) {
-        send_json(false, 'Account not found.');
-    }
-
     $stmt = $pdo->prepare('UPDATE users SET full_name = ? WHERE id = ?');
-    $stmt->execute([$fullName, $user['id']]);
+    $stmt->execute([$fullName, $auth['id']]);
 
-    send_json(true, 'Profile updated.', ['serverId' => (int) $user['id']]);
+    send_json(true, 'Profile updated.', ['serverId' => $auth['id']]);
 } catch (Throwable $e) {
     error_log('update_profile.php error: ' . $e->getMessage());
     send_json(false, 'Unable to connect to the server. Please try again.', null, 500);

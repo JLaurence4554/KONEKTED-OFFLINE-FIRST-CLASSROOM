@@ -8,16 +8,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $classCode    = strtoupper(trim($input['classCode'] ?? ''));
-$studentName  = trim($input['studentName'] ?? '');
-$studentEmail = trim($input['studentEmail'] ?? '');
 
-if ($classCode === '' || $studentEmail === '') {
+// The student is the logged-in account (see "Login protection" in common.php);
+// studentName / studentEmail in the request are no longer used to decide who
+// is asking - an email that isn't the logged-in account's is refused.
+$pdo = open_authenticated('Student', $auth);
+assert_same_account($auth, $input['studentEmail'] ?? '');
+
+if ($classCode === '') {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-
     // Find the class by code
     $stmt = $pdo->prepare('SELECT id FROM classes WHERE class_code = ?');
     $stmt->execute([$classCode]);
@@ -27,8 +29,7 @@ try {
     }
     $classId = (int) $classRow['id'];
 
-    // Find or create the student
-    $studentId = get_or_create_user($pdo, $studentName, $studentEmail, 'Student');
+    $studentId = $auth['id'];
 
     // Check if already a member
     $stmt = $pdo->prepare('SELECT id FROM class_members WHERE class_id = ? AND student_id = ?');

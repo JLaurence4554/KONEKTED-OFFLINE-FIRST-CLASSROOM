@@ -2,11 +2,31 @@
 // PostgreSQL connection settings.
 // A default PostgreSQL install uses user 'postgres' with the password
 // you set during installation, on localhost port 5432.
-define('DB_HOST', 'localhost');
-define('DB_PORT', '5432');
-define('DB_NAME', 'classroom_sync');
-define('DB_USER', 'postgres');
-define('DB_PASS', 'Password123'); // Set your PostgreSQL password here
+//
+// Every setting below can also be supplied as an environment variable
+// (KONEKTED_DB_HOST, KONEKTED_DB_PORT, KONEKTED_DB_NAME, KONEKTED_DB_USER,
+// KONEKTED_DB_PASS), which wins over the value written here. On a real
+// server, set them in the web server's environment instead of keeping a
+// password in this file, and use a database user that only owns this
+// database (not the "postgres" superuser).
+define('DB_HOST', getenv('KONEKTED_DB_HOST') ?: 'localhost');
+define('DB_PORT', getenv('KONEKTED_DB_PORT') ?: '5432');
+define('DB_NAME', getenv('KONEKTED_DB_NAME') ?: 'classroom_sync');
+define('DB_USER', getenv('KONEKTED_DB_USER') ?: 'postgres');
+define('DB_PASS', getenv('KONEKTED_DB_PASS') !== false ? getenv('KONEKTED_DB_PASS') : 'Password123'); // Set your PostgreSQL password here
+
+// Login protection (see api/common.php). Every endpoint except login.php and
+// register.php needs the token the app receives when it logs in.
+//   KONEKTED_REQUIRE_HTTPS=1  refuse plain-HTTP requests. Turn this on in
+//                             production, where the site has a real certificate
+//                             (or sits behind a proxy that sets
+//                             X-Forwarded-Proto).
+//   KONEKTED_TRUST_PROXY=1    take the visitor's address from
+//                             X-Forwarded-For (only when a proxy you control,
+//                             e.g. nginx, sets it) so login attempts are
+//                             counted per real visitor instead of per proxy.
+define('REQUIRE_HTTPS', getenv('KONEKTED_REQUIRE_HTTPS') === '1');
+define('TRUST_PROXY_HEADERS', getenv('KONEKTED_TRUST_PROXY') === '1');
 
 // Server-side storage for the files the app uploads (lesson attachments and
 // profile pictures). They are only ever served back through

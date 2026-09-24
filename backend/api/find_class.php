@@ -6,13 +6,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
+// Any logged-in person may look a class up by its code (see "Login protection" in common.php).
+$pdo = open_authenticated(null, $auth);
+
 $classCode = strtoupper(trim($_GET['code'] ?? ''));
 if ($classCode === '') {
     send_json(false, 'Class code is required.');
 }
 
 try {
-    $pdo = get_db_connection();
     $stmt = $pdo->prepare(
         'SELECT c.id, c.class_name, c.subject, c.section, c.school_year, c.class_code,
                 u.full_name AS teacher_name, u.email AS teacher_email

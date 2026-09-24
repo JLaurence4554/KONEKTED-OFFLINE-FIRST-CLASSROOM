@@ -8,21 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input        = read_json_body();
 $attachmentId = (int) ($input['attachmentId'] ?? 0);
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($attachmentId === 0 || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($attachmentId === 0) {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
 
     // Ownership check the same way sync_lesson_attachment.php does, walking
     // attachment -> lesson -> class -> teacher, so one teacher can't delete
@@ -33,7 +29,7 @@ try {
          JOIN classes c ON c.id = l.class_id
          WHERE la.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$attachmentId, $teacher['id']]);
+    $stmt->execute([$attachmentId, $auth['id']]);
     $attachment = $stmt->fetch();
     if (!$attachment) {
         // Already gone, or never existed, or not owned by this teacher -

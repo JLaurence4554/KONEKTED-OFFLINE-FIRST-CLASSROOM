@@ -203,3 +203,33 @@ CREATE TABLE IF NOT EXISTS join_requests (
 
 CREATE INDEX IF NOT EXISTS idx_join_requests_class ON join_requests (class_id);
 CREATE INDEX IF NOT EXISTS idx_join_requests_student ON join_requests (student_id);
+
+-- Login protection (see "Login protection" in api/common.php).
+-- One row per phone that is logged in: login.php / register.php create it and
+-- hand the app the secret token; only the token's SHA-256 is stored here.
+-- Rows are deleted by logout.php, expire after 90 days unused, and go away with
+-- their user. (api/common.php's ensure_auth_schema() runs these same statements
+-- on the first login, so a server updated without re-running this file works too.)
+CREATE TABLE IF NOT EXISTS auth_tokens (
+    id BIGSERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    last_used_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_auth_tokens_user ON auth_tokens (user_id);
+
+-- Recent login / sign-up attempts, so passwords can't be guessed by trying
+-- them one after another (8 failures in 15 minutes lock that email for a
+-- while). Old rows are deleted automatically.
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id BIGSERIAL PRIMARY KEY,
+    kind VARCHAR(10) NOT NULL,
+    email VARCHAR(190),
+    ip VARCHAR(64),
+    succeeded BOOLEAN NOT NULL,
+    attempted_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_login_attempts_email ON login_attempts (kind, email, attempted_at);
+CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts (kind, ip, attempted_at);

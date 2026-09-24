@@ -17,9 +17,13 @@ $choiceD        = trim($input['choiceD'] ?? '');
 $correctAnswer  = strtoupper(trim($input['correctAnswer'] ?? ''));
 $answerText     = isset($input['answerText']) ? trim($input['answerText']) : null;
 $orderIndex     = (int) ($input['orderIndex'] ?? 0);
-$teacherEmail   = trim($input['teacherEmail'] ?? '');
 
-if ($quizId === 0 || $questionText === '' || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($quizId === 0 || $questionText === '') {
     send_json(false, 'Missing required fields.');
 }
 
@@ -34,23 +38,14 @@ if ($questionType === 'MULTIPLE_CHOICE' && !in_array($correctAnswer, ['A', 'B', 
 }
 
 try {
-    $pdo = get_db_connection();
-
     // Verify the teacher owns the quiz's lesson's class
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare(
         'SELECT q.id FROM quizzes q
          INNER JOIN lessons l ON q.lesson_id = l.id
          INNER JOIN classes c ON l.class_id = c.id
          WHERE q.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$quizId, $teacher['id']]);
+    $stmt->execute([$quizId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'Quiz not found or you do not own it.');
     }

@@ -8,28 +8,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $classId      = (int) ($input['classId'] ?? 0);
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($classId === 0 || $teacherEmail === '') {
-    send_json(false, 'Missing required fields (classId, teacherEmail).');
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($classId === 0) {
+    send_json(false, 'Missing required fields (classId).');
 }
-
-$pdo = null;
 
 try {
     ensure_attachments_dir();
-    $pdo = get_db_connection();
 
     // Only the owning teacher may delete the class.
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare('SELECT id FROM classes WHERE id = ? AND teacher_id = ?');
-    $stmt->execute([$classId, $teacher['id']]);
+    $stmt->execute([$classId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'Class not found or not owned by you.');
     }

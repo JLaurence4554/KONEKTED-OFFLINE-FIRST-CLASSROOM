@@ -8,23 +8,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $quizId       = (int) ($input['quizId'] ?? 0);
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($quizId === 0 || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($quizId === 0) {
     send_json(false, 'Missing required fields.');
 }
 
-$pdo = null;
 try {
-    $pdo = get_db_connection();
-
     // Only the teacher who owns the quiz's class may delete it.
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
 
     $stmt = $pdo->prepare(
         'SELECT q.id
@@ -33,7 +28,7 @@ try {
          JOIN classes c ON c.id = l.class_id
          WHERE q.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$quizId, $teacher['id']]);
+    $stmt->execute([$quizId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'Quiz not found or not owned by you.');
     }

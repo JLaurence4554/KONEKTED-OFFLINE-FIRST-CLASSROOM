@@ -13,30 +13,24 @@ $instructions = trim($input['instructions'] ?? '');
 $timeLimit    = isset($input['timeLimitMinutes']) ? (int) $input['timeLimitMinutes'] : null;
 $passingScore = (int) ($input['passingScore'] ?? 0);
 $status       = trim($input['status'] ?? 'Draft');
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($lessonId === 0 || $title === '' || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($lessonId === 0 || $title === '') {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-
-    // Verify the teacher owns the lesson's class
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
-    // Find the lesson and verify ownership
+    // Find the lesson and verify the teacher owns its class
     $stmt = $pdo->prepare(
         'SELECT l.id, l.class_id FROM lessons l
          INNER JOIN classes c ON l.class_id = c.id
          WHERE l.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$lessonId, $teacher['id']]);
+    $stmt->execute([$lessonId, $auth['id']]);
     $lesson = $stmt->fetch();
     if (!$lesson) {
         send_json(false, 'Lesson not found or you do not own it.');

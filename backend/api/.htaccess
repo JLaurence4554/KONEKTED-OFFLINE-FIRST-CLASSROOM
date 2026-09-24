@@ -1,0 +1,6 @@
+# The app proves who it is with an "Authorization: Bearer <token>" header (see
+# "Login protection" in common.php). Some Apache setups don't hand that header
+# on to PHP; this makes sure they do. Harmless where it isn't needed.
+<IfModule mod_setenvif.c>
+    SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
+</IfModule>

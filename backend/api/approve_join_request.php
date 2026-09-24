@@ -8,21 +8,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $classCode    = strtoupper(trim($input['classCode'] ?? ''));
-$studentEmail = strtolower(trim($input['studentEmail'] ?? ''));
+$studentEmail = strtolower(trim($input['studentEmail'] ?? '')); // the student being approved
+
+// The teacher is the logged-in account (see "Login protection" in common.php).
+// Before this, nothing checked who was asking, so anyone could approve anyone
+// into any class.
+$pdo = open_authenticated('Teacher', $auth);
 
 if ($classCode === '' || $studentEmail === '') {
     send_json(false, 'Missing required fields (classCode, studentEmail).');
 }
 
 try {
-    $pdo = get_db_connection();
-
-    // Find the class by code
-    $stmt = $pdo->prepare('SELECT id FROM classes WHERE class_code = ?');
+    // Find the class by code - and make sure it's this teacher's
+    $stmt = $pdo->prepare('SELECT id, teacher_id FROM classes WHERE class_code = ?');
     $stmt->execute([$classCode]);
     $classRow = $stmt->fetch();
     if (!$classRow) {
         send_json(false, 'Class not found.');
+    }
+    if ((int) $classRow['teacher_id'] !== $auth['id']) {
+        send_forbidden('You do not own this class.');
     }
     $classId = (int) $classRow['id'];
 

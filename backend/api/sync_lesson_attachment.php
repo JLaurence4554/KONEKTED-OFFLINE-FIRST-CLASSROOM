@@ -12,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// checked first, so a caller without a login gets a 401 whatever else is wrong.
+$pdo = open_authenticated('Teacher', $auth);
+
 $hasFile = isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK;
 
 if ($hasFile) {
@@ -29,8 +33,11 @@ if ($hasFile) {
     $mimeType     = null;
 }
 
+// A teacherEmail in the request is only checked against the logged-in account.
+assert_same_account($auth, $teacherEmail);
+
 if ($lessonId === 0 || !in_array($type, ['IMAGE', 'FILE', 'VIDEO_LINK'], true)
-        || $name === '' || $teacherEmail === '') {
+        || $name === '') {
     send_json(false, 'Missing or invalid required fields.');
 }
 if ($type === 'VIDEO_LINK' && $hasFile) {
@@ -41,22 +48,13 @@ if ($type !== 'VIDEO_LINK' && !$hasFile) {
 }
 
 try {
-    $pdo = get_db_connection();
-
     // Verify the teacher owns the class this lesson belongs to.
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare(
         'SELECT l.id FROM lessons l
          JOIN classes c ON c.id = l.class_id
          WHERE l.id = ? AND c.teacher_id = ?'
     );
-    $stmt->execute([$lessonId, $teacher['id']]);
+    $stmt->execute([$lessonId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'You do not own this lesson.');
     }

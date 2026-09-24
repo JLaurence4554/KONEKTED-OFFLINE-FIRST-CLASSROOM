@@ -8,38 +8,36 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $quizId        = (int) ($input['quizId'] ?? 0);
-$studentEmail  = trim($input['studentEmail'] ?? '');
 $score         = (int) ($input['score'] ?? 0);
 $correctCount  = (int) ($input['correctCount'] ?? 0);
 $totalQuestions = (int) ($input['totalQuestions'] ?? 0);
 
-if ($quizId === 0 || $studentEmail === '') {
+// The result belongs to the logged-in student (see "Login protection" in
+// common.php); a studentEmail in the request is only checked against it.
+$pdo = open_authenticated('Student', $auth);
+assert_same_account($auth, $input['studentEmail'] ?? '');
+
+if ($quizId === 0) {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
+    $studentId = $auth['id'];
 
-    // Find or create the student
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($studentEmail), 'Student']);
-    $student = $stmt->fetch();
-    if (!$student) {
-        // Try as any role (teacher can also submit for testing)
-        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
-        $stmt->execute([strtolower($studentEmail)]);
-        $student = $stmt->fetch();
-        if (!$student) {
-            send_json(false, 'Student not found.');
-        }
-    }
-    $studentId = (int) $student['id'];
-
-    // Verify the quiz exists
-    $stmt = $pdo->prepare('SELECT id FROM quizzes WHERE id = ?');
+    // Verify the quiz exists, and that this student belongs to its class
+    $stmt = $pdo->prepare(
+        'SELECT c.id AS class_id FROM quizzes q
+         JOIN lessons l ON l.id = q.lesson_id
+         JOIN classes c ON c.id = l.class_id
+         WHERE q.id = ?'
+    );
     $stmt->execute([$quizId]);
-    if (!$stmt->fetch()) {
+    $quizClass = $stmt->fetch();
+    if (!$quizClass) {
         send_json(false, 'Quiz not found.');
+    }
+    if (class_role($pdo, $auth, (int) $quizClass['class_id']) === null) {
+        send_forbidden('You are not a member of the class this quiz belongs to.');
     }
 
     // Upsert: if already submitted, update; otherwise insert

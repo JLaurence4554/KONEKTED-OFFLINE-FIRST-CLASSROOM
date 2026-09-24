@@ -6,13 +6,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     send_json(false, 'Method not allowed.', null, 405);
 }
 
+// Any logged-in person may ask, but only the class's teacher or one of its
+// students gets its lessons (see "Login protection" in common.php).
+$pdo = open_authenticated(null, $auth);
+
 $classId = (int) ($_GET['classId'] ?? 0);
 if ($classId === 0) {
     send_json(false, 'classId is required.');
 }
 
 try {
-    $pdo = get_db_connection();
+    $stmt = $pdo->prepare('SELECT 1 FROM classes WHERE id = ?');
+    $stmt->execute([$classId]);
+    if (!$stmt->fetch()) {
+        // No such class (it was deleted): nothing to return, same as before.
+        send_json(true, 'Lessons fetched.', ['lessons' => []]);
+    }
+    if (class_role($pdo, $auth, $classId) === null) {
+        send_forbidden('You do not have access to this class.');
+    }
+
     $stmt = $pdo->prepare(
         'SELECT id, class_id, title, body, created_at, updated_at
          FROM lessons WHERE class_id = ? ORDER BY created_at DESC'

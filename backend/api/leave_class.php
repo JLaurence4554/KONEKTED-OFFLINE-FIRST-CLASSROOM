@@ -8,23 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = read_json_body();
 $classCode   = strtoupper(trim($input['classCode'] ?? ''));
-$studentEmail = strtolower(trim($input['studentEmail'] ?? ''));
 
-if ($classCode === '' || $studentEmail === '') {
-    send_json(false, 'Missing required fields (classCode, studentEmail).');
+// The student is the logged-in account (see "Login protection" in common.php).
+$pdo = open_authenticated('Student', $auth);
+assert_same_account($auth, $input['studentEmail'] ?? '');
+
+if ($classCode === '') {
+    send_json(false, 'Missing required fields (classCode).');
 }
 
 try {
-    $pdo = get_db_connection();
-
-    // Find the student by email
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = \'Student\'');
-    $stmt->execute([$studentEmail]);
-    $studentRow = $stmt->fetch();
-    if (!$studentRow) {
-        send_json(false, 'Student not found.');
-    }
-    $studentId = (int) $studentRow['id'];
+    $studentId = $auth['id'];
 
     // Find the class by its unique code (matches what the app generates)
     $stmt = $pdo->prepare('SELECT id FROM classes WHERE class_code = ?');

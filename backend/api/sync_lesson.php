@@ -18,25 +18,20 @@ $classId      = (int) ($input['classId'] ?? 0);
 $lessonId     = (int) ($input['lessonId'] ?? 0);
 $title        = trim($input['title'] ?? '');
 $body         = trim($input['body'] ?? '');
-$teacherEmail = trim($input['teacherEmail'] ?? '');
 
-if ($classId === 0 || $title === '' || $body === '' || $teacherEmail === '') {
+// The teacher is the logged-in account (see "Login protection" in common.php);
+// a teacherEmail in the request is only checked against it.
+$pdo = open_authenticated('Teacher', $auth);
+assert_same_account($auth, $input['teacherEmail'] ?? '');
+
+if ($classId === 0 || $title === '' || $body === '') {
     send_json(false, 'Missing required fields.');
 }
 
 try {
-    $pdo = get_db_connection();
-
     // Verify the teacher owns this class
-    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND role = ?');
-    $stmt->execute([strtolower($teacherEmail), 'Teacher']);
-    $teacher = $stmt->fetch();
-    if (!$teacher) {
-        send_json(false, 'Teacher not found.');
-    }
-
     $stmt = $pdo->prepare('SELECT id FROM classes WHERE id = ? AND teacher_id = ?');
-    $stmt->execute([$classId, $teacher['id']]);
+    $stmt->execute([$classId, $auth['id']]);
     if (!$stmt->fetch()) {
         send_json(false, 'You do not own this class.');
     }
