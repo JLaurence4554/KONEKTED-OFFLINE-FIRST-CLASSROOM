@@ -159,7 +159,7 @@ const LOGIN_WINDOW_MINUTES = 15;
 const LOGIN_MAX_FAILURES_PER_EMAIL = 8;
 const LOGIN_MAX_FAILURES_PER_IP = 100;
 const REGISTER_WINDOW_MINUTES = 60;
-const REGISTER_MAX_PER_IP = 30;
+define('REGISTER_MAX_PER_IP', konekted_int('KONEKTED_REGISTER_MAX_PER_IP', 30));
 
 /** A real bcrypt hash of nothing anyone knows: checked against when the email doesn't exist, so a wrong email takes as long as a wrong password. */
 const DUMMY_PASSWORD_HASH = '$2y$10$RDxinXMmUDPpZA38LQ0ZM.zxXLS4A8LZUcEI.9mnPOakX7xRA3rf2';

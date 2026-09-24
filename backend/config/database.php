@@ -25,8 +25,24 @@ define('DB_PASS', getenv('KONEKTED_DB_PASS') !== false ? getenv('KONEKTED_DB_PAS
 //                             X-Forwarded-For (only when a proxy you control,
 //                             e.g. nginx, sets it) so login attempts are
 //                             counted per real visitor instead of per proxy.
-define('REQUIRE_HTTPS', getenv('KONEKTED_REQUIRE_HTTPS') === '1');
-define('TRUST_PROXY_HEADERS', getenv('KONEKTED_TRUST_PROXY') === '1');
+//   KONEKTED_REGISTER_MAX_PER_IP=N   sign-ups allowed per address per hour (default 30).
+//                             Raise it for a class or a test session where many
+//                             phones share one WiFi (they look like one address).
+// A setting can come from a real environment variable, or from Apache's
+// "SetEnv KONEKTED_... 1" line (e.g. in api/.htaccess), which PHP sees in $_SERVER.
+function konekted_flag(string $name): bool {
+    return getenv($name) === '1' || (($_SERVER[$name] ?? '') === '1');
+}
+// A number setting, same two sources; falls back to the default when unset or not a positive whole number.
+function konekted_int(string $name, int $default): int {
+    $raw = getenv($name);
+    if ($raw === false) {
+        $raw = $_SERVER[$name] ?? '';
+    }
+    return ctype_digit((string) $raw) && (int) $raw > 0 ? (int) $raw : $default;
+}
+define('REQUIRE_HTTPS', konekted_flag('KONEKTED_REQUIRE_HTTPS'));
+define('TRUST_PROXY_HEADERS', konekted_flag('KONEKTED_TRUST_PROXY'));
 
 // Server-side storage for the files the app uploads (lesson attachments and
 // profile pictures). They are only ever served back through

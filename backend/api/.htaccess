@@ -4,3 +4,8 @@
 <IfModule mod_setenvif.c>
     SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
 </IfModule>
+
+# Running behind ngrok (or any proxy you control)? Then turn this on, so every phone is counted
+# by its own address instead of all of them as one visitor (the sign-up and wrong-password limits
+# are per address). Leave it OFF when the API is reachable directly, or anyone could fake an address.
+#SetEnv KONEKTED_TRUST_PROXY 1

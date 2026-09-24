@@ -170,6 +170,10 @@ the `debug` (LAN) build type.
     on a real server); `KONEKTED_TRUST_PROXY=1` trusts `X-Forwarded-For` /
     `X-Forwarded-Proto` from a reverse proxy or ngrok (only set it when one
     really is in front, otherwise anyone can fake their address).
+    `KONEKTED_REGISTER_MAX_PER_IP=N` sets how many sign-ups one address may make per hour (default 30;
+    raise it when many phones share one WiFi, e.g. a class test). On Apache you can set any of these in
+    `api/.htaccess` with a `SetEnv NAME value` line (a commented example is there). **Behind ngrok, turn
+    `KONEKTED_TRUST_PROXY` on**, or every phone counts as one visitor.
   - **Test it:** `C:\xampp\php\php.exe backend\tests\api_test.php` builds a
     throwaway database and web server, and checks every endpoint both as the
     app uses it and as an attacker would (no login, someone else's login, the
