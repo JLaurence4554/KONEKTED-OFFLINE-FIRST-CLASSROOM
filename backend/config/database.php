@@ -20,6 +20,14 @@ define('DB_PASS', getenv('KONEKTED_DB_PASS') !== false ? getenv('KONEKTED_DB_PAS
 $konektedSslMode = getenv('KONEKTED_DB_SSLMODE') ?: '';
 define('DB_SSLMODE', in_array($konektedSslMode, ['disable', 'allow', 'prefer', 'require', 'verify-ca', 'verify-full'], true) ? $konektedSslMode : '');
 
+// Seconds allowed for one attempt to reach the database. libpq's own default is
+// the operating system's, which on an address that never answers runs past a
+// minute; every request opens its own connection (see get_db_connection()) and
+// the built-in server has only a few workers (see backend/Dockerfile), so one
+// attempt that never gives up would take the whole API down with it.
+// Override with KONEKTED_DB_CONNECT_TIMEOUT.
+define('DB_CONNECT_TIMEOUT', (int) (getenv('KONEKTED_DB_CONNECT_TIMEOUT') ?: 10));
+
 // Login protection (see api/common.php). Every endpoint except login.php and
 // register.php needs the token the app receives when it logs in.
 //   KONEKTED_REQUIRE_HTTPS=1  refuse plain-HTTP requests. Turn this on in
@@ -113,7 +121,10 @@ function write_attachments_guard(string $dir): void {
  * Please try again." response.
  */
 function get_db_connection(): PDO {
-    $dsn = 'pgsql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
+    // Bounded, so a database that is unreachable fails this one request
+    // quickly instead of holding a worker open until the OS gives up.
+    $dsn = 'pgsql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME
+         . ';connect_timeout=' . DB_CONNECT_TIMEOUT;
     if (DB_SSLMODE !== '') {
         $dsn .= ';sslmode=' . DB_SSLMODE;
     }

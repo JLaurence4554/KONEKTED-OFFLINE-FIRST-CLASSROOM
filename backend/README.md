@@ -261,3 +261,12 @@ the Supabase Storage bucket `attachments` (created automatically) instead of
 the container's disk - so lesson files and profile pictures survive every
 redeploy, and no Railway volume is needed. Leaving those two variables out
 keeps files on the server disk, exactly like XAMPP.
+
+The container starts PHP's built-in server with **four worker processes**
+(`PHP_CLI_SERVER_WORKERS` in `backend/Dockerfile`). That server answers one
+request at a time by default, so a single slow request makes every other one
+queue behind it - and the app sends several calls at once whenever a dashboard
+opens, which showed up as bursts of HTTP 499 in Railway's **Network Logs** (499
+means the caller gave up before the server answered, here the app's own
+10-second timeout). Raise the Railway variable `PHP_CLI_SERVER_WORKERS` on a
+plan with more CPU; leave it unset to keep the default of 4.

@@ -24,4 +24,16 @@ COPY backend/ /var/www/html/
 # Shell form so the variable expands; default 8080 if a host forgets to set it.
 # The -d flags raise PHP's conservative CLI defaults so a 5 MB profile photo
 # or a lesson PDF can actually be uploaded (CLI defaults are 2 MB).
-CMD php -d upload_max_filesize=32M -d post_max_size=34M -d memory_limit=256M -S 0.0.0.0:${PORT:-8080} router.php
+#
+# PHP_CLI_SERVER_WORKERS: the built-in server handles ONE request at a time,
+# so a single slow request (a database round-trip, an upload) makes every other
+# request wait behind it - and the app sends several calls at once whenever a
+# dashboard opens (SyncManager.syncAllSilently pushes pending classes,
+# memberships, join requests, lessons, quizzes, results and the profile photo).
+# With a single worker that queue ran past the app's 10-second timeout
+# (ApiClient.java) and showed up in the Railway logs as a stream of 499s; the
+# workers below let those calls overlap instead. Linux only - PHP has no
+# forked workers on Windows, where the local XAMPP setup needs none anyway -
+# and a plain PHP_CLI_SERVER_WORKERS variable overrides the default on a
+# bigger plan.
+CMD PHP_CLI_SERVER_WORKERS=${PHP_CLI_SERVER_WORKERS:-4} php -d upload_max_filesize=32M -d post_max_size=34M -d memory_limit=256M -S 0.0.0.0:${PORT:-8080} router.php
