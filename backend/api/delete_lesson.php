@@ -34,10 +34,10 @@ try {
         send_json(false, 'Lesson not found or not owned by you.');
     }
 
-    // Remove the server-side attachment file if one exists.
-    if (!empty($lesson['attachment_path']) && file_exists(ATTACHMENTS_DIR . '/' . $lesson['attachment_path'])) {
-        //noinspection PhpUsageOfSuppressOperator
-        @unlink(ATTACHMENTS_DIR . '/' . $lesson['attachment_path']);
+    // Remove the stored attachment file if one exists (Supabase Storage when
+    // configured, otherwise this server's disk).
+    if (!empty($lesson['attachment_path'])) {
+        remove_stored_file($lesson['attachment_path']);
     }
 
     // quizzes/questions/quiz_results don't cascade on the DB side, so a lesson

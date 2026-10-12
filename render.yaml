@@ -1,0 +1,52 @@
+# KONEKTED backend on Render - a permanent HTTPS address that replaces ngrok.
+#
+# Render has no native PHP runtime, so the service runs as a small Docker
+# container built from backend/Dockerfile (runtime: docker below). Inside it,
+# PHP 8.2's built-in server + backend/router.php serve only / and /api/*.php.
+#
+# How to use (once):
+#   1. Push this repository to GitHub (it currently has no remote).
+#   2. On https://dashboard.render.com: New + -> Web Service -> connect the repo.
+#      Render reads this blueprint automatically.
+#   3. Fill in the three settings marked "sync: false" when Render asks
+#      (Supabase dashboard -> Connect -> Session pooler):
+#        KONEKTED_DB_HOST  e.g. aws-0-XXXX-YYYY.pooler.supabase.com
+#        KONEKTED_DB_USER  e.g. postgres.<project-code>
+#        KONEKTED_DB_PASS  the Supabase database password (kept secret)
+#   4. After the first deploy, copy the service URL into
+#      ClassroomApp/app/build.gradle (internet build type, keep the trailing
+#      /api/), then:  cd ClassroomApp && ./gradlew assembleInternet
+services:
+  - type: web
+    name: konekted-api
+    runtime: docker        # PHP is not a native Render runtime; Docker runs it
+    plan: free             # sleeps after ~15 min idle; paid plan stays awake
+    dockerfilePath: backend/Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: KONEKTED_DB_HOST
+        sync: false       # paste: aws-0-XXXX-YYYY.pooler.supabase.com
+      - key: KONEKTED_DB_PORT
+        value: "5432"
+      - key: KONEKTED_DB_NAME
+        value: postgres
+      - key: KONEKTED_DB_USER
+        sync: false       # paste: postgres.<project-code> (note the dot)
+      - key: KONEKTED_DB_PASS
+        sync: false       # the Supabase database password (secret)
+      - key: KONEKTED_DB_SSLMODE
+        value: require
+      - key: KONEKTED_REQUIRE_HTTPS
+        value: "1"        # Render terminates TLS; refuse plain HTTP
+      - key: KONEKTED_TRUST_PROXY
+        value: "1"        # Render sets X-Forwarded-For / X-Forwarded-Proto
+      - key: KONEKTED_REGISTER_MAX_PER_IP
+        value: "200"      # a whole class often shares one Wi-Fi address
+
+# Free plan has no permanent disk: uploaded lesson files / profile pictures are
+# lost on every redeploy (the app stores them on the server disk). If that
+# matters, move to a paid plan and add a disk:
+#    disks:
+#      - name: konekted_attachments
+#        mountPath: /var/www/html/attachments
+#        sizeGB: 1

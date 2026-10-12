@@ -166,7 +166,9 @@ the `debug` (LAN) build type.
   - **Settings** (environment variables, all optional; defaults are the
     XAMPP values in `config/database.php`): `KONEKTED_DB_HOST`,
     `KONEKTED_DB_PORT`, `KONEKTED_DB_NAME`, `KONEKTED_DB_USER`,
-    `KONEKTED_DB_PASS`; `KONEKTED_REQUIRE_HTTPS=1` refuses plain HTTP (use it
+    `KONEKTED_DB_PASS`; `KONEKTED_DB_SSLMODE=require` encrypts the database
+    connection (needed for a hosted database such as Supabase; see
+    `supabase/SUPABASE_SETUP.md`); `KONEKTED_REQUIRE_HTTPS=1` refuses plain HTTP (use it
     on a real server); `KONEKTED_TRUST_PROXY=1` trusts `X-Forwarded-For` /
     `X-Forwarded-Proto` from a reverse proxy or ngrok (only set it when one
     really is in front, otherwise anyone can fake their address).
@@ -201,8 +203,61 @@ the `debug` (LAN) build type.
   directly even if someone knows/guesses its URL. This only works on
   Apache with `.htaccess` enabled (XAMPP's default) — if you deploy on
   nginx or another server, replicate the equivalent block (deny access to
-  `config/` in the server config) yourself.
-- **Use HTTPS for anything beyond local testing.** ngrok's free tier
-  already gives you HTTPS for testing; a real deployment should terminate
-  TLS (a proper certificate, e.g. via Let's Encrypt) rather than serving
-  plain HTTP.
+  `config/` in the server config) yourself.- **Use HTTPS for anything beyond local testing.** ngrok's free tier already gives you HTTPS for testing; a real deployment should terminate TLS (a proper certificate, e.g. via Let's Encrypt) rather than serving plain HTTP.
+
+## 5. Deploying for real on Render (replacing ngrok)
+
+ngrok changes its URL every restart. For a permanent address, the same
+`backend/` folder runs on Render (free plan) and talks to the Supabase
+database (see `supabase/SUPABASE_SETUP.md`):
+
+1. Push this repository to GitHub.
+2. On https://dashboard.render.com: **New +** -> **Web Service** -> connect
+   the repo. Render picks up `render.yaml` (repo root) automatically - PHP
+   has no native runtime on Render, so a small Docker container
+   (`backend/Dockerfile`) runs `php -S 0.0.0.0:$PORT router.php` inside
+   `backend/`.
+3. When asked, fill the three secret settings: `KONEKTED_DB_HOST`,
+   `KONEKTED_DB_USER`, `KONEKTED_DB_PASS` (Supabase dashboard -> **Connect**
+   -> **Session pooler**).
+4. After the first deploy, put the service URL in
+   `ClassroomApp/app/build.gradle` (internet build type, keep the trailing
+   `/api/`) and rebuild: `./gradlew assembleInternet`.
+
+`router.php` replaces the `.htaccess` rules (Render has no Apache): only `/`
+and `/api/<endpoint>.php` are served; `config/`, `supabase/`, `tests/` and
+`attachments/` answer 404. Known free-plan limits: the service sleeps after
+~15 minutes of no visits (the first phone to open the app waits ~1 minute for
+it to wake), and uploaded files are lost on every redeploy (see the `disks:`
+comment in `render.yaml`).
+
+## 6. Deploying on Railway (always awake - for real users)
+
+Same container as Render: `railway.json` at the repo root points Railway at
+`backend/Dockerfile`. About $5 a month, never sleeps, no keep-alive tricks -
+the right choice once real people use the app instead of a demo.
+
+1. Push this repository to GitHub.
+2. On https://railway.com: **New Project** -> **Deploy from GitHub repo** ->
+   pick the repo. Railway reads `railway.json` and builds the image.
+3. Open the service -> **Variables** and set:
+
+   | Name | Value |
+   |---|---|
+   | `KONEKTED_DB_HOST`, `KONEKTED_DB_PORT`, `KONEKTED_DB_NAME`, `KONEKTED_DB_USER`, `KONEKTED_DB_PASS` | Supabase dashboard -> **Connect** -> **Session pooler** |
+   | `KONEKTED_DB_SSLMODE` | `require` |
+   | `KONEKTED_REQUIRE_HTTPS` | `1` |
+   | `KONEKTED_TRUST_PROXY` | `1` |
+   | `KONEKTED_REGISTER_MAX_PER_IP` | `200` |
+   | `KONEKTED_SUPABASE_URL` | Supabase -> **Settings** -> **API** -> Project URL (`https://xxxx.supabase.co`) |
+   | `KONEKTED_SUPABASE_STORAGE_KEY` | same page -> **service_role** key (a secret - never commit it) |
+
+4. Service -> **Networking** -> **Generate Domain** -> copy the HTTPS URL.
+5. Put the URL in `ClassroomApp/app/build.gradle` (internet build type, keep
+   the trailing `/api/`) and rebuild: `./gradlew assembleInternet`.
+
+With the two `KONEKTED_SUPABASE_*` variables set, every uploaded file goes to
+the Supabase Storage bucket `attachments` (created automatically) instead of
+the container's disk - so lesson files and profile pictures survive every
+redeploy, and no Railway volume is needed. Leaving those two variables out
+keeps files on the server disk, exactly like XAMPP.

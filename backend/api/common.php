@@ -76,6 +76,129 @@ function get_or_create_user(PDO $pdo, string $fullName, string $email, string $r
     return (int) $pdo->lastInsertId();
 }
 
+// ---------------------------------------------------------------------------
+// Supabase Storage (optional home for uploads - see KONEKTED_SUPABASE_* in
+// config/database.php). Flat object names only (the unique names below), so
+// the database columns and the app need no change when the switch is flipped.
+// Uses PHP's HTTP stream wrapper, so no curl extension is required.
+// ---------------------------------------------------------------------------
+
+/** HTTPS URL of one object in the private bucket. */
+function storage_object_url(string $name): string {
+    return SUPABASE_URL . '/storage/v1/object/' . rawurlencode(STORAGE_BUCKET) . '/' . rawurlencode($name);
+}
+
+/** Create the bucket once per request if it is missing (best effort: "already exists" is the happy path). */
+function storage_ensure_bucket(): void {
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $done = true;
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'POST',
+        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\nContent-Type: application/json\r\n",
+        'content' => json_encode(['name' => STORAGE_BUCKET, 'public' => false]),
+        'ignore_errors' => true,
+        'timeout' => 15,
+    ]]);
+    //noinspection PhpUsageOfSuppressOperator
+    @file_get_contents(SUPABASE_URL . '/storage/v1/bucket', false, $ctx);
+}
+
+/**
+ * Copy a local file into Supabase Storage under $name (an existing object of
+ * that name is replaced). Throws on failure, so an upload is never reported
+ * as saved when it isn't.
+ */
+function storage_put(string $name, string $localPath): void {
+    storage_ensure_bucket();
+    $bytes = file_get_contents($localPath);
+    if ($bytes === false) {
+        throw new RuntimeException('storage_put: cannot read ' . $localPath);
+    }
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'POST',
+        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n"
+                   . "Content-Type: application/octet-stream\r\n"
+                   . "x-upsert: true\r\n",
+        'content' => $bytes,
+        'ignore_errors' => true,
+        'timeout' => 30,
+    ]]);
+    //noinspection PhpUsageOfSuppressOperator
+    $result = @file_get_contents(storage_object_url($name), false, $ctx);
+    $status = (int) (explode(' ', $http_response_header[0] ?? ' ')[1] ?? 0);
+    if ($result === false || $status < 200 || $status >= 300) {
+        throw new RuntimeException('storage_put failed (HTTP ' . $status . ')');
+    }
+}
+
+/** Best-effort delete of one object (a missing object is already the wanted state). */
+function storage_delete(string $name): void {
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'DELETE',
+        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n",
+        'ignore_errors' => true,
+        'timeout' => 15,
+    ]]);
+    //noinspection PhpUsageOfSuppressOperator
+    @file_get_contents(storage_object_url($name), false, $ctx);
+}
+
+/**
+ * Fetch an object: ['body' => string, 'contentType' => string], or null when
+ * no object of that name exists.
+ */
+function storage_get(string $name): ?array {
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'GET',
+        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n",
+        'ignore_errors' => true,
+        'timeout' => 30,
+    ]]);
+    //noinspection PhpUsageOfSuppressOperator
+    $body = @file_get_contents(storage_object_url($name), false, $ctx);
+    $status = (int) (explode(' ', $http_response_header[0] ?? ' ')[1] ?? 0);
+    if ($body === false || $status === 404) {
+        return null;
+    }
+    if ($status < 200 || $status >= 300) {
+        throw new RuntimeException('storage_get failed (HTTP ' . $status . ')');
+    }
+    $contentType = 'application/octet-stream';
+    foreach ($http_response_header ?? [] as $headerLine) {
+        if (stripos($headerLine, 'content-type:') === 0) {
+            $contentType = trim(substr($headerLine, 13));
+            break;
+        }
+    }
+    return ['body' => $body, 'contentType' => $contentType];
+}
+
+/**
+ * Remove a file wherever it lives: Supabase Storage when that is enabled,
+ * and always this server's disk (harmlessly absent when storage is used).
+ * The name is checked first, so it can never escape the attachments folder.
+ */
+function remove_stored_file(string $name): void {
+    if (strpos($name, '..') !== false || strpos($name, '/') !== false || strpos($name, '\\') !== false) {
+        return;
+    }
+    if (storage_enabled()) {
+        try {
+            storage_delete($name);
+        } catch (Throwable $e) {
+            error_log('remove_stored_file: ' . $e->getMessage());
+        }
+    }
+    $local = ATTACHMENTS_DIR . '/' . $name;
+    if (is_file($local)) {
+        //noinspection PhpUsageOfSuppressOperator
+        @unlink($local);
+    }
+}
+
 /**
  * Move an uploaded temp file into the server attachments directory under a
  * unique name and return the relative path (relative to ATTACHMENTS_DIR) to
@@ -90,6 +213,18 @@ function store_uploaded_attachment(string $tmpPath, string $originalName): strin
     $dest = ATTACHMENTS_DIR . '/' . $uniqueName;
     if (!move_uploaded_file($tmpPath, $dest)) {
         throw new RuntimeException('Failed to store uploaded attachment.');
+    }
+    if (storage_enabled()) {
+        try {
+            storage_put($uniqueName, $dest);
+        } catch (Throwable $e) {
+            // Never keep a half-saved upload: drop the local copy too and let
+            // the endpoint report the failure to the app (it keeps its own
+            // copy and will retry, offline-first as usual).
+            //noinspection PhpUsageOfSuppressOperator
+            @unlink($dest);
+            throw $e;
+        }
     }
     return $uniqueName;
 }

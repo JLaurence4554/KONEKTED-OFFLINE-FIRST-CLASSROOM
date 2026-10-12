@@ -7,3 +7,16 @@
 # ClassroomApp/ is its own git repo (with its own remote on GitHub) - do not
 # nest/embed it inside this outer repo, just leave it alone entirely here.
 /ClassroomApp/
+
+# Supabase tooling (backend/supabase): the connection file holds the database
+# password and must never be committed; node_modules is installed locally.
+backend/supabase/.env.local
+backend/supabase/node_modules/
+
+# Files the app uploads (student documents, profile pictures) live on the
+# server, never in git.
+backend/attachments/
+
+# Environment files anywhere hold secrets (database password, API keys).
+.env
+.env.*

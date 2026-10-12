@@ -27,6 +27,30 @@ try {
         send_forbidden('You do not have access to this file.');
     }
 
+    if (storage_enabled()) {
+        // Supabase Storage is the source of truth when it is configured.
+        $stored = storage_get($file);
+        if ($stored === null) {
+            send_json(false, 'Attachment not found.', null, 404);
+        }
+        // Sniff the type from the actual bytes, as the disk path below does,
+        // so the app receives the same Content-Type either way.
+        $mime = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $stored['body']);
+        if ($mime === false || $mime === 'application/x-empty') {
+            $mime = 'application/octet-stream';
+        }
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($file));
+        header('Content-Length: ' . strlen($stored['body']));
+        header('Cache-Control: no-store');
+        header('X-Content-Type-Options: nosniff');
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+        echo $stored['body'];
+        exit;
+    }
+
     $fullPath = ATTACHMENTS_DIR . '/' . $file;
     if (!is_file($fullPath)) {
         send_json(false, 'Attachment not found.', null, 404);

@@ -5,7 +5,7 @@
 //
 // Every setting below can also be supplied as an environment variable
 // (KONEKTED_DB_HOST, KONEKTED_DB_PORT, KONEKTED_DB_NAME, KONEKTED_DB_USER,
-// KONEKTED_DB_PASS), which wins over the value written here. On a real
+// KONEKTED_DB_PASS, KONEKTED_DB_SSLMODE), which wins over the value written here. On a real
 // server, set them in the web server's environment instead of keeping a
 // password in this file, and use a database user that only owns this
 // database (not the "postgres" superuser).
@@ -14,6 +14,11 @@ define('DB_PORT', getenv('KONEKTED_DB_PORT') ?: '5432');
 define('DB_NAME', getenv('KONEKTED_DB_NAME') ?: 'classroom_sync');
 define('DB_USER', getenv('KONEKTED_DB_USER') ?: 'postgres');
 define('DB_PASS', getenv('KONEKTED_DB_PASS') !== false ? getenv('KONEKTED_DB_PASS') : 'Password123'); // Set your PostgreSQL password here
+// Encrypted connection to the database. Leave it unset for a database on the same
+// computer (XAMPP). A hosted database such as Supabase needs KONEKTED_DB_SSLMODE=require.
+// Only the values PostgreSQL knows are accepted; anything else is ignored.
+$konektedSslMode = getenv('KONEKTED_DB_SSLMODE') ?: '';
+define('DB_SSLMODE', in_array($konektedSslMode, ['disable', 'allow', 'prefer', 'require', 'verify-ca', 'verify-full'], true) ? $konektedSslMode : '');
 
 // Login protection (see api/common.php). Every endpoint except login.php and
 // register.php needs the token the app receives when it logs in.
@@ -54,6 +59,24 @@ define('TRUST_PROXY_HEADERS', konekted_flag('KONEKTED_TRUST_PROXY'));
 // backend/README.md). common.php also limits uploads to harmless extensions.
 define('ATTACHMENTS_DIR', __DIR__ . '/../attachments');
 
+// Optional home for uploaded files: Supabase Storage instead of this server's
+// disk. Set all three environment variables and uploads, downloads and
+// deletes switch to the Supabase project's private "attachments" bucket, so
+// files survive redeploys and work on hosts with a temporary disk (Render,
+// Railway). Left unset, the server disk above is used exactly as before.
+//   KONEKTED_SUPABASE_URL          e.g. https://abcdefgh.supabase.co (Settings -> API -> Project URL)
+//   KONEKTED_SUPABASE_STORAGE_KEY  the service_role key (Settings -> API) - server-side
+//                                  only; never commit it or send it to the app
+//   KONEKTED_STORAGE_BUCKET        optional, defaults to "attachments"
+define('SUPABASE_URL', rtrim((string) (getenv('KONEKTED_SUPABASE_URL') ?: ''), '/'));
+define('SUPABASE_STORAGE_KEY', (string) (getenv('KONEKTED_SUPABASE_STORAGE_KEY') ?: ''));
+define('STORAGE_BUCKET', (string) (getenv('KONEKTED_STORAGE_BUCKET') ?: 'attachments'));
+
+/** True when uploads are kept in Supabase Storage rather than on this server's disk. */
+function storage_enabled(): bool {
+    return SUPABASE_URL !== '' && SUPABASE_STORAGE_KEY !== '';
+}
+
 /**
  * Ensures the attachments directory exists and is closed off from direct web
  * access. Safe to call on every request.
@@ -91,6 +114,9 @@ function write_attachments_guard(string $dir): void {
  */
 function get_db_connection(): PDO {
     $dsn = 'pgsql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
+    if (DB_SSLMODE !== '') {
+        $dsn .= ';sslmode=' . DB_SSLMODE;
+    }
     return new PDO($dsn, DB_USER, DB_PASS, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

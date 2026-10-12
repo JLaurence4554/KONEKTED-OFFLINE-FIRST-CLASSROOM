@@ -70,9 +70,8 @@ try {
     // Only now that the row points at the new photo (or none), drop the old file.
     $old = $user['profile_picture'];
     if (!empty($old) && $old !== $newName && strpos($old, '/') === false && strpos($old, '\\') === false
-            && strpos($old, '..') === false && is_file(ATTACHMENTS_DIR . '/' . $old)) {
-        //noinspection PhpUsageOfSuppressOperator
-        @unlink(ATTACHMENTS_DIR . '/' . $old);
+            && strpos($old, '..') === false && (storage_enabled() || is_file(ATTACHMENTS_DIR . '/' . $old))) {
+        remove_stored_file($old);
     }
 
     send_json(true, $newName !== null ? 'Profile picture updated.' : 'Profile picture removed.', [
@@ -80,9 +79,8 @@ try {
     ]);
 } catch (Throwable $e) {
     // Don't leave a stored file behind that no account points to.
-    if ($newName !== null && is_file(ATTACHMENTS_DIR . '/' . $newName)) {
-        //noinspection PhpUsageOfSuppressOperator
-        @unlink(ATTACHMENTS_DIR . '/' . $newName);
+    if ($newName !== null) {
+        remove_stored_file($newName);
     }
     error_log('upload_profile_picture.php error: ' . $e->getMessage());
     send_json(false, 'Unable to save the profile picture.', null, 500);

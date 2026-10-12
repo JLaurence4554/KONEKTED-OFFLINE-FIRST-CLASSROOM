@@ -39,10 +39,7 @@ try {
     }
 
     if (!empty($attachment['file_path'])) {
-        $fullPath = ATTACHMENTS_DIR . '/' . $attachment['file_path'];
-        if (is_file($fullPath)) {
-            unlink($fullPath);
-        }
+        remove_stored_file($attachment['file_path']);
     }
 
     $stmt = $pdo->prepare('DELETE FROM lesson_attachments WHERE id = ?');

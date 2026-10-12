@@ -1,0 +1,13 @@
+{
+  "name": "konekted-supabase-tool",
+  "private": true,
+  "type": "module",
+  "description": "Applies backend/supabase/schema_supabase.sql to a Supabase project over SSL (replaces the manual SQL Editor paste). Connection details come from .env.local, which is git-ignored.",
+  "scripts": {
+    "apply": "node apply-schema.mjs",
+    "check": "node apply-schema.mjs --check"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}

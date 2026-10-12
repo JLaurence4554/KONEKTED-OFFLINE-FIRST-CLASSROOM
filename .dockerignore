@@ -1,0 +1,14 @@
+# The Docker build context is the repository root, but only backend/ is
+# copied into the image (see backend/Dockerfile). Keep everything else - and
+# above all any secrets - out of the image.
+.git
+.freebuff
+.idea
+.opencode
+ClassroomApp
+abobot
+screenshot
+**/node_modules
+backend/supabase/.env.local
+backend/attachments
+*.log

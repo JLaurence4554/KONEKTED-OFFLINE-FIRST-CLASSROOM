@@ -35,11 +35,7 @@ try {
     $stmt->execute([$classId]);
     foreach ($stmt->fetchAll() as $row) {
         if (!empty($row['attachment_path'])) {
-            $path = ATTACHMENTS_DIR . '/' . $row['attachment_path'];
-            if (file_exists($path)) {
-                //noinspection PhpUsageOfSuppressOperator
-                @unlink($path);
-            }
+            remove_stored_file($row['attachment_path']);
         }
     }
 
