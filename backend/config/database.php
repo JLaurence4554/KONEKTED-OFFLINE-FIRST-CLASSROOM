@@ -22,11 +22,18 @@ define('DB_SSLMODE', in_array($konektedSslMode, ['disable', 'allow', 'prefer', '
 
 // Seconds allowed for one attempt to reach the database. libpq's own default is
 // the operating system's, which on an address that never answers runs past a
-// minute; every request opens its own connection (see get_db_connection()) and
-// the built-in server has only a few workers (see backend/Dockerfile), so one
-// attempt that never gives up would take the whole API down with it.
+// minute; the built-in server has only a few workers (see backend/Dockerfile),
+// so one attempt that never gives up would take the whole API down with it.
 // Override with KONEKTED_DB_CONNECT_TIMEOUT.
 define('DB_CONNECT_TIMEOUT', (int) (getenv('KONEKTED_DB_CONNECT_TIMEOUT') ?: 10));
+
+// Reuse one database connection per server process instead of opening a fresh
+// one for every request (see get_db_connection()). Reaching a hosted database
+// means a DNS lookup, then TCP, TLS and pooler authentication - measured at
+// roughly 0.9 s from Railway to Supabase - and the API was paying all of that
+// again on each request. Set KONEKTED_DB_NO_REUSE=1 to go back to one
+// connection per request if a deployment ever misbehaves.
+define('DB_REUSE_CONNECTIONS', getenv('KONEKTED_DB_NO_REUSE') !== '1');
 
 // Login protection (see api/common.php). Every endpoint except login.php and
 // register.php needs the token the app receives when it logs in.
@@ -116,6 +123,13 @@ function write_attachments_guard(string $dir): void {
 
 /**
  * Opens (and returns) a PDO connection to PostgreSQL.
+ *
+ * The connection is persistent (see DB_REUSE_CONNECTIONS): PHP keeps one per
+ * server process and hands it to that process's next request, so the connect
+ * above is paid once per worker instead of once per request. PDO replaces a
+ * pooled connection the database has since dropped, so one the pooler closed
+ * while idle costs the next request a fresh connect rather than an error.
+ *
  * Throws PDOException on failure — every endpoint wraps its DB work
  * in try/catch and turns that into the "Unable to connect to the server.
  * Please try again." response.
@@ -132,5 +146,7 @@ function get_db_connection(): PDO {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
+        // Hand this connection back to the next request on this process.
+        PDO::ATTR_PERSISTENT => DB_REUSE_CONNECTIONS,
     ]);
 }

@@ -270,3 +270,11 @@ opens, which showed up as bursts of HTTP 499 in Railway's **Network Logs** (499
 means the caller gave up before the server answered, here the app's own
 10-second timeout). Raise the Railway variable `PHP_CLI_SERVER_WORKERS` on a
 plan with more CPU; leave it unset to keep the default of 4.
+
+Each worker also keeps its **database connection open** and reuses it
+(`DB_REUSE_CONNECTIONS` in `backend/config/database.php`). Reaching a hosted
+database costs a DNS lookup, a TCP handshake, a TLS handshake and pooler
+authentication - about 0.9 s from Railway to Supabase - and because every
+endpoint calls `get_db_connection()`, that was being paid again on every
+request. Set `KONEKTED_DB_NO_REUSE=1` in the service's variables to go back to
+one connection per request if anything ever looks wrong.
