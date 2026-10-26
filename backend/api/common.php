@@ -83,6 +83,29 @@ function get_or_create_user(PDO $pdo, string $fullName, string $email, string $r
 // Uses PHP's HTTP stream wrapper, so no curl extension is required.
 // ---------------------------------------------------------------------------
 
+/**
+ * Header lines that authenticate a Storage request with KONEKTED_SUPABASE_STORAGE_KEY.
+ *  - Legacy keys (the long "eyJ..." service_role JWT) work as "Authorization: Bearer" and as "apikey".
+ *  - New secret keys ("sb_secret_...") are NOT JWTs: Supabase wants them in the "apikey" header only,
+ *    and refuses them as a Bearer token (every upload then fails with 401/403 and nothing is stored).
+ * Ends with "\r\n" so more header lines can follow.
+ */
+function storage_auth_headers(): string {
+    $headers = 'apikey: ' . SUPABASE_STORAGE_KEY . "\r\n";
+    if (strpos(SUPABASE_STORAGE_KEY, 'sb_') !== 0) {
+        $headers .= 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n";
+    }
+    return $headers;
+}
+
+/** First bytes of a Storage error reply (Supabase's own explanation, e.g. "Invalid Compact JWS"), safe to log. */
+function storage_error_detail($body): string {
+    if (!is_string($body) || $body === '') {
+        return '';
+    }
+    return ': ' . substr(preg_replace('/\s+/', ' ', $body), 0, 200);
+}
+
 /** HTTPS URL of one object in the private bucket. */
 function storage_object_url(string $name): string {
     return SUPABASE_URL . '/storage/v1/object/' . rawurlencode(STORAGE_BUCKET) . '/' . rawurlencode($name);
@@ -97,7 +120,7 @@ function storage_ensure_bucket(): void {
     $done = true;
     $ctx = stream_context_create(['http' => [
         'method'  => 'POST',
-        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\nContent-Type: application/json\r\n",
+        'header'  => storage_auth_headers() . "Content-Type: application/json\r\n",
         'content' => json_encode(['name' => STORAGE_BUCKET, 'public' => false]),
         'ignore_errors' => true,
         'timeout' => 15,
@@ -119,7 +142,7 @@ function storage_put(string $name, string $localPath): void {
     }
     $ctx = stream_context_create(['http' => [
         'method'  => 'POST',
-        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n"
+        'header'  => storage_auth_headers()
                    . "Content-Type: application/octet-stream\r\n"
                    . "x-upsert: true\r\n",
         'content' => $bytes,
@@ -130,7 +153,7 @@ function storage_put(string $name, string $localPath): void {
     $result = @file_get_contents(storage_object_url($name), false, $ctx);
     $status = (int) (explode(' ', $http_response_header[0] ?? ' ')[1] ?? 0);
     if ($result === false || $status < 200 || $status >= 300) {
-        throw new RuntimeException('storage_put failed (HTTP ' . $status . ')');
+        throw new RuntimeException('storage_put failed (HTTP ' . $status . ')' . storage_error_detail($result));
     }
 }
 
@@ -138,7 +161,7 @@ function storage_put(string $name, string $localPath): void {
 function storage_delete(string $name): void {
     $ctx = stream_context_create(['http' => [
         'method'  => 'DELETE',
-        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n",
+        'header'  => storage_auth_headers(),
         'ignore_errors' => true,
         'timeout' => 15,
     ]]);
@@ -153,7 +176,7 @@ function storage_delete(string $name): void {
 function storage_get(string $name): ?array {
     $ctx = stream_context_create(['http' => [
         'method'  => 'GET',
-        'header'  => 'Authorization: Bearer ' . SUPABASE_STORAGE_KEY . "\r\n",
+        'header'  => storage_auth_headers(),
         'ignore_errors' => true,
         'timeout' => 30,
     ]]);
@@ -164,7 +187,7 @@ function storage_get(string $name): ?array {
         return null;
     }
     if ($status < 200 || $status >= 300) {
-        throw new RuntimeException('storage_get failed (HTTP ' . $status . ')');
+        throw new RuntimeException('storage_get failed (HTTP ' . $status . ')' . storage_error_detail($body));
     }
     $contentType = 'application/octet-stream';
     foreach ($http_response_header ?? [] as $headerLine) {
