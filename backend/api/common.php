@@ -106,6 +106,14 @@ function storage_error_detail($body): string {
     return ': ' . substr(preg_replace('/\s+/', ' ', $body), 0, 200);
 }
 
+/** Why a Storage call got no HTTP reply at all - PHP's own error and the host tried (never the key). */
+function storage_connect_failure(): string {
+    $err = error_get_last();
+    $host = parse_url(SUPABASE_URL, PHP_URL_HOST) ?: SUPABASE_URL;
+    return ': no response from ' . $host
+        . ($err ? ' - ' . substr(preg_replace('/\s+/', ' ', $err['message']), 0, 200) : '');
+}
+
 /** HTTPS URL of one object in the private bucket. */
 function storage_object_url(string $name): string {
     return SUPABASE_URL . '/storage/v1/object/' . rawurlencode(STORAGE_BUCKET) . '/' . rawurlencode($name);
@@ -153,7 +161,10 @@ function storage_put(string $name, string $localPath): void {
     $result = @file_get_contents(storage_object_url($name), false, $ctx);
     $status = (int) (explode(' ', $http_response_header[0] ?? ' ')[1] ?? 0);
     if ($result === false || $status < 200 || $status >= 300) {
-        throw new RuntimeException('storage_put failed (HTTP ' . $status . ')' . storage_error_detail($result));
+        // HTTP 0 = no reply at all (bad address, DNS, TLS, refused): say what PHP saw,
+        // and which host it tried, so the log points at the setting to fix.
+        $why = $status === 0 ? storage_connect_failure() : storage_error_detail($result);
+        throw new RuntimeException('storage_put failed (HTTP ' . $status . ')' . $why);
     }
 }
 
@@ -187,7 +198,8 @@ function storage_get(string $name): ?array {
         return null;
     }
     if ($status < 200 || $status >= 300) {
-        throw new RuntimeException('storage_get failed (HTTP ' . $status . ')' . storage_error_detail($body));
+        $why = $status === 0 ? storage_connect_failure() : storage_error_detail($body);
+        throw new RuntimeException('storage_get failed (HTTP ' . $status . ')' . $why);
     }
     $contentType = 'application/octet-stream';
     foreach ($http_response_header ?? [] as $headerLine) {

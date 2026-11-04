@@ -83,8 +83,26 @@ define('ATTACHMENTS_DIR', __DIR__ . '/../attachments');
 //   KONEKTED_SUPABASE_STORAGE_KEY  the service_role key (Settings -> API) - server-side
 //                                  only; never commit it or send it to the app
 //   KONEKTED_STORAGE_BUCKET        optional, defaults to "attachments"
-define('SUPABASE_URL', rtrim((string) (getenv('KONEKTED_SUPABASE_URL') ?: ''), '/'));
-define('SUPABASE_STORAGE_KEY', (string) (getenv('KONEKTED_SUPABASE_STORAGE_KEY') ?: ''));
+/**
+ * The project URL as typed into the host's settings, made into the plain
+ * "https://xxxx.supabase.co" the Storage calls need. Pasted values often carry
+ * quotes or spaces, miss "https://", or end in "/rest/v1" or "/storage/v1"
+ * (copied from another Supabase page) - every one of those made each upload
+ * fail at once with "storage_put failed (HTTP 0)" (no connection was made).
+ */
+function konekted_supabase_url(string $raw): string {
+    $url = trim($raw, " \t\n\r\0\x0B\"'");
+    if ($url === '') {
+        return '';
+    }
+    if (!preg_match('#^https?://#i', $url)) {
+        $url = 'https://' . $url;
+    }
+    $url = preg_replace('#/(rest|storage|auth)/v1.*$#i', '', $url);
+    return rtrim($url, '/');
+}
+define('SUPABASE_URL', konekted_supabase_url((string) (getenv('KONEKTED_SUPABASE_URL') ?: '')));
+define('SUPABASE_STORAGE_KEY', trim((string) (getenv('KONEKTED_SUPABASE_STORAGE_KEY') ?: ''), " \t\n\r\0\x0B\"'"));
 define('STORAGE_BUCKET', (string) (getenv('KONEKTED_STORAGE_BUCKET') ?: 'attachments'));
 
 /** True when uploads are kept in Supabase Storage rather than on this server's disk. */
