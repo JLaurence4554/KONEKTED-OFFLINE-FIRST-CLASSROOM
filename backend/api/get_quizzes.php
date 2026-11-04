@@ -23,13 +23,19 @@ try {
         // No such lesson (it was deleted): nothing to return, same as before.
         send_json(true, 'Quizzes fetched.', ['quizzes' => []]);
     }
-    if (class_role($pdo, $auth, (int) $lessonRow['class_id']) === null) {
+    $role = class_role($pdo, $auth, (int) $lessonRow['class_id']);
+    if ($role === null) {
         send_forbidden('You do not have access to this lesson.');
     }
 
+    // Students only ever see published quizzes - a draft is teacher-only
+    // content (the app's own student UI filters the same way locally; this
+    // keeps the raw response honest too).
     $stmt = $pdo->prepare(
         'SELECT id, lesson_id, title, instructions, time_limit_minutes, passing_score, status, created_at
-         FROM quizzes WHERE lesson_id = ? ORDER BY created_at DESC'
+         FROM quizzes WHERE lesson_id = ?'
+            . ($role === 'owner' ? '' : " AND status = 'Published'")
+            . ' ORDER BY created_at DESC'
     );
     $stmt->execute([$lessonId]);
     $quizzes = $stmt->fetchAll();

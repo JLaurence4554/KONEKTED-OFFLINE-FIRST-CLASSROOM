@@ -41,19 +41,29 @@ try {
     }
     $studentId = (int) $studentRow['id'];
 
-    // Update join_requests status to APPROVED (if a pending request exists)
-    $stmt = $pdo->prepare(
-        'UPDATE join_requests SET status = \'APPROVED\', resolved_at = NOW()
-         WHERE class_id = ? AND student_id = ? AND status = \'PENDING\''
-    );
-    $stmt->execute([$classId, $studentId]);
-
-    // Insert class_members if not already a member
-    $stmt = $pdo->prepare('SELECT id FROM class_members WHERE class_id = ? AND student_id = ?');
-    $stmt->execute([$classId, $studentId]);
-    if (!$stmt->fetch()) {
-        $stmt = $pdo->prepare('INSERT INTO class_members (class_id, student_id) VALUES (?, ?)');
+    // One transaction: an approval that marked the request approved but then
+    // failed to add the member would leave the student stuck (request gone,
+    // no access) with no way to re-request from their side.
+    $pdo->beginTransaction();
+    try {
+        // Update join_requests status to APPROVED (if a pending request exists)
+        $stmt = $pdo->prepare(
+            'UPDATE join_requests SET status = \'APPROVED\', resolved_at = NOW()
+             WHERE class_id = ? AND student_id = ? AND status = \'PENDING\''
+        );
         $stmt->execute([$classId, $studentId]);
+
+        // Insert class_members if not already a member
+        $stmt = $pdo->prepare('SELECT id FROM class_members WHERE class_id = ? AND student_id = ?');
+        $stmt->execute([$classId, $studentId]);
+        if (!$stmt->fetch()) {
+            $stmt = $pdo->prepare('INSERT INTO class_members (class_id, student_id) VALUES (?, ?)');
+            $stmt->execute([$classId, $studentId]);
+        }
+        $pdo->commit();
+    } catch (Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
     }
 
     send_json(true, 'Student approved and added to class.');

@@ -29,6 +29,7 @@ try {
 
     $stmt = $pdo->prepare(
         'SELECT r.id, r.quiz_id, r.student_id, r.score, r.correct_count, r.total_questions,
+                r.graded_score, r.essay_answers,
                 r.submitted_at, u.full_name AS student_name, u.email AS student_email
          FROM quiz_results r
          INNER JOIN users u ON r.student_id = u.id

@@ -34,10 +34,33 @@ try {
         send_json(false, 'Lesson not found or not owned by you.');
     }
 
-    // Remove the stored attachment file if one exists (Supabase Storage when
-    // configured, otherwise this server's disk).
+    // Collect the stored files (Supabase Storage when configured, otherwise
+    // this server's disk) now, but remove them only after the commit so a
+    // failed DB delete can't leave rows pointing at missing files.
+    $filesToRemove = [];
     if (!empty($lesson['attachment_path'])) {
-        remove_stored_file($lesson['attachment_path']);
+        $filesToRemove[] = $lesson['attachment_path'];
+    }
+    $stmt = $pdo->prepare('SELECT file_path FROM lesson_attachments WHERE lesson_id = ? AND file_path IS NOT NULL');
+    $stmt->execute([$lessonId]);
+    foreach ($stmt->fetchAll() as $row) {
+        if (!empty($row['file_path'])) {
+            $filesToRemove[] = $row['file_path'];
+        }
+    }
+
+    // The lesson's homework goes with it (its rows cascade; the students' stored files don't).
+    ensure_homework_schema($pdo);
+    $stmt = $pdo->prepare(
+        'SELECT hs.file_path FROM homework_submissions hs
+         JOIN homework h ON h.id = hs.homework_id
+         WHERE h.lesson_id = ? AND hs.file_path IS NOT NULL'
+    );
+    $stmt->execute([$lessonId]);
+    foreach ($stmt->fetchAll() as $row) {
+        if (!empty($row['file_path'])) {
+            $filesToRemove[] = $row['file_path'];
+        }
     }
 
     // quizzes/questions/quiz_results don't cascade on the DB side, so a lesson
@@ -50,8 +73,13 @@ try {
         'DELETE FROM questions WHERE quiz_id IN (SELECT id FROM quizzes WHERE lesson_id = ?)'
     )->execute([$lessonId]);
     $pdo->prepare('DELETE FROM quizzes WHERE lesson_id = ?')->execute([$lessonId]);
+    $pdo->prepare('DELETE FROM homework WHERE lesson_id = ?')->execute([$lessonId]); // hand-ins cascade
     $pdo->prepare('DELETE FROM lessons WHERE id = ?')->execute([$lessonId]);
     $pdo->commit();
+
+    foreach ($filesToRemove as $path) {
+        remove_stored_file($path);
+    }
 
     send_json(true, 'Lesson deleted.', null);
 } catch (Throwable $e) {

@@ -11,6 +11,13 @@ $quizId        = (int) ($input['quizId'] ?? 0);
 $score         = (int) ($input['score'] ?? 0);
 $correctCount  = (int) ($input['correctCount'] ?? 0);
 $totalQuestions = (int) ($input['totalQuestions'] ?? 0);
+// The student's essay answers (JSON keyed by question id, built by
+// QuizRepository.submitQuizResult) ride along with the result so the
+// teacher can read and grade them from any device. Optional: older app
+// versions don't send it. graded_score is deliberately NOT accepted here -
+// this endpoint runs as the Student, and the teacher's score override is
+// teacher-owned (see grade_quiz_result.php).
+$essayAnswers  = isset($input['essayAnswers']) ? trim((string) $input['essayAnswers']) : '';
 
 // The result belongs to the logged-in student (see "Login protection" in
 // common.php); a studentEmail in the request is only checked against it.
@@ -46,20 +53,26 @@ try {
     $existing = $stmt->fetch();
 
     if ($existing) {
+        // graded_score is intentionally left alone: a student's re-push must
+        // never erase a grade the teacher already gave. An empty essayAnswers
+        // keeps whatever the server had (NULLIF -> COALESCE), so a retry from
+        // an older app version can't wipe answers already stored.
         $stmt = $pdo->prepare(
-            'UPDATE quiz_results SET score = ?, correct_count = ?, total_questions = ?
+            'UPDATE quiz_results SET score = ?, correct_count = ?, total_questions = ?,
+                    essay_answers = COALESCE(NULLIF(?, \'\'), essay_answers)
              WHERE id = ?'
         );
-        $stmt->execute([$score, $correctCount, $totalQuestions, $existing['id']]);
+        $stmt->execute([$score, $correctCount, $totalQuestions, $essayAnswers, $existing['id']]);
         send_json(true, 'Result updated.', ['serverId' => (int) $existing['id']]);
         return;
     }
 
     $stmt = $pdo->prepare(
-        'INSERT INTO quiz_results (quiz_id, student_id, score, correct_count, total_questions)
-         VALUES (?, ?, ?, ?, ?)'
+        'INSERT INTO quiz_results (quiz_id, student_id, score, correct_count, total_questions, essay_answers)
+         VALUES (?, ?, ?, ?, ?, ?)'
     );
-    $stmt->execute([$quizId, $studentId, $score, $correctCount, $totalQuestions]);
+    $stmt->execute([$quizId, $studentId, $score, $correctCount, $totalQuestions,
+                    $essayAnswers !== '' ? $essayAnswers : NULL]);
     send_json(true, 'Result synced.', ['serverId' => (int) $pdo->lastInsertId()]);
 } catch (Throwable $e) {
     error_log('sync_quiz_result.php error: ' . $e->getMessage());

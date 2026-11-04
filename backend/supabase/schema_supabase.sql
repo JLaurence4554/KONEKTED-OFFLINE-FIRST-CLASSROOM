@@ -170,6 +170,11 @@ CREATE TABLE IF NOT EXISTS quiz_results (
     CONSTRAINT fk_results_student FOREIGN KEY (student_id) REFERENCES users(id)
 );
 
+-- Teacher grading + essay answers ride along with the result row. Safe to
+-- re-run on a database created before these columns existed.
+ALTER TABLE quiz_results ADD COLUMN IF NOT EXISTS graded_score INTEGER;
+ALTER TABLE quiz_results ADD COLUMN IF NOT EXISTS essay_answers TEXT;
+
 -- Attendance table
 CREATE TABLE IF NOT EXISTS attendance (
     id SERIAL PRIMARY KEY,
@@ -205,6 +210,55 @@ CREATE TABLE IF NOT EXISTS join_requests (
 
 CREATE INDEX IF NOT EXISTS idx_join_requests_class ON join_requests (class_id);
 CREATE INDEX IF NOT EXISTS idx_join_requests_student ON join_requests (student_id);
+
+-- Announcements (a teacher posts a short message to a class; students pull it).
+-- client_key is made by the teacher's phone so a re-sent post isn't posted twice.
+-- (api/common.php's ensure_announcements_schema() runs this same statement on first use.)
+CREATE TABLE IF NOT EXISTS announcements (
+    id SERIAL PRIMARY KEY,
+    class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(120) NOT NULL,
+    message TEXT NOT NULL,
+    client_key VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT uniq_announcement_class_key UNIQUE (class_id, client_key)
+);
+CREATE INDEX IF NOT EXISTS idx_announcements_class ON announcements (class_id, id);
+
+-- Homework: a teacher gives a class an assignment; each student hands in one
+-- file and/or note (a new hand-in replaces the old one until it is graded).
+-- Times are epoch milliseconds. (api/common.php's ensure_homework_schema() runs
+-- these same statements on first use.)
+CREATE TABLE IF NOT EXISTS homework (
+    id SERIAL PRIMARY KEY,
+    class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    lesson_id INTEGER REFERENCES lessons(id) ON DELETE SET NULL,
+    teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(120) NOT NULL,
+    instructions TEXT NOT NULL DEFAULT '',
+    due_at BIGINT,
+    client_key VARCHAR(64) NOT NULL,
+    created_at BIGINT NOT NULL,
+    CONSTRAINT uniq_homework_class_key UNIQUE (class_id, client_key)
+);
+CREATE INDEX IF NOT EXISTS idx_homework_class ON homework (class_id, id);
+
+CREATE TABLE IF NOT EXISTS homework_submissions (
+    id SERIAL PRIMARY KEY,
+    homework_id INTEGER NOT NULL REFERENCES homework(id) ON DELETE CASCADE,
+    student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    note TEXT NOT NULL DEFAULT '',
+    file_path VARCHAR(255),
+    file_name VARCHAR(255),
+    mime_type VARCHAR(100),
+    submitted_at BIGINT NOT NULL,
+    grade INTEGER,
+    feedback TEXT,
+    graded_at BIGINT,
+    CONSTRAINT uniq_homework_student UNIQUE (homework_id, student_id)
+);
+CREATE INDEX IF NOT EXISTS idx_homework_submissions_hw ON homework_submissions (homework_id);
 
 -- Login protection (see "Login protection" in api/common.php).
 -- One row per phone that is logged in: login.php / register.php create it and
@@ -254,6 +308,9 @@ ALTER TABLE questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE quiz_results ENABLE ROW LEVEL SECURITY;
 ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE join_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE announcements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE homework ENABLE ROW LEVEL SECURITY;
+ALTER TABLE homework_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE auth_tokens ENABLE ROW LEVEL SECURITY;
 ALTER TABLE login_attempts ENABLE ROW LEVEL SECURITY;
 

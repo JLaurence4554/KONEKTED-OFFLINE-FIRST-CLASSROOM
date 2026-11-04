@@ -30,12 +30,40 @@ try {
 
     $pdo->beginTransaction();
 
-    // Remove attachment files for every lesson in this class before the rows go away.
+    // Collect every stored file (main attachment + multi-attachment rows) now,
+    // but only remove them after the commit: deleting first would leave rows
+    // pointing at missing files if the DB delete failed and rolled back.
+    $filesToRemove = [];
     $stmt = $pdo->prepare('SELECT attachment_path FROM lessons WHERE class_id = ? AND attachment_path IS NOT NULL');
     $stmt->execute([$classId]);
     foreach ($stmt->fetchAll() as $row) {
         if (!empty($row['attachment_path'])) {
-            remove_stored_file($row['attachment_path']);
+            $filesToRemove[] = $row['attachment_path'];
+        }
+    }
+    $stmt = $pdo->prepare(
+        'SELECT la.file_path FROM lesson_attachments la
+         JOIN lessons l ON l.id = la.lesson_id
+         WHERE l.class_id = ? AND la.file_path IS NOT NULL'
+    );
+    $stmt->execute([$classId]);
+    foreach ($stmt->fetchAll() as $row) {
+        if (!empty($row['file_path'])) {
+            $filesToRemove[] = $row['file_path'];
+        }
+    }
+
+    // Students' homework files (the homework rows themselves cascade with the class).
+    ensure_homework_schema($pdo);
+    $stmt = $pdo->prepare(
+        'SELECT hs.file_path FROM homework_submissions hs
+         JOIN homework h ON h.id = hs.homework_id
+         WHERE h.class_id = ? AND hs.file_path IS NOT NULL'
+    );
+    $stmt->execute([$classId]);
+    foreach ($stmt->fetchAll() as $row) {
+        if (!empty($row['file_path'])) {
+            $filesToRemove[] = $row['file_path'];
         }
     }
 
@@ -68,6 +96,10 @@ try {
     $pdo->prepare('DELETE FROM classes WHERE id = ?')->execute([$classId]);
 
     $pdo->commit();
+
+    foreach ($filesToRemove as $path) {
+        remove_stored_file($path);
+    }
 
     send_json(true, 'Class deleted.', null);
 } catch (Throwable $e) {

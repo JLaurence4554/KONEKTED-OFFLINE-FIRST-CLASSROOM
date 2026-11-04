@@ -411,6 +411,83 @@ function ensure_auth_schema(PDO $pdo): void {
     $done = true;
 }
 
+/**
+ * Creates the announcements table if it's missing (same statement as in
+ * schema.sql), so a server updated without re-running the schema still works.
+ * client_key is made by the teacher's phone: sending the same announcement
+ * twice (the reply was lost) finds the first one instead of posting it again.
+ */
+function ensure_announcements_schema(PDO $pdo): void {
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $pdo->exec("CREATE TABLE IF NOT EXISTS announcements (
+        id SERIAL PRIMARY KEY,
+        class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+        teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(120) NOT NULL,
+        message TEXT NOT NULL,
+        client_key VARCHAR(64) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        CONSTRAINT uniq_announcement_class_key UNIQUE (class_id, client_key)
+    )");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_announcements_class ON announcements (class_id, id)");
+    $done = true;
+}
+
+/**
+ * Creates the homework tables if they're missing (same statements as in
+ * schema.sql), so a server updated without re-running the schema still works.
+ * All times are epoch milliseconds (BIGINT), so there is no time-zone guessing
+ * when the app decides whether a hand-in was late.
+ * client_key (made by the teacher's phone) means a re-sent assignment is found,
+ * not created twice. One submission per student per homework: a new hand-in
+ * replaces the old one until the teacher grades it.
+ */
+function ensure_homework_schema(PDO $pdo): void {
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $pdo->exec("CREATE TABLE IF NOT EXISTS homework (
+        id SERIAL PRIMARY KEY,
+        class_id INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+        teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(120) NOT NULL,
+        instructions TEXT NOT NULL DEFAULT '',
+        due_at BIGINT,
+        client_key VARCHAR(64) NOT NULL,
+        created_at BIGINT NOT NULL,
+        CONSTRAINT uniq_homework_class_key UNIQUE (class_id, client_key)
+    )");
+    // A homework belongs to one lesson (the teacher decides which lessons have one).
+    // Added after the first version of this table, so existing servers get it too.
+    $pdo->exec("ALTER TABLE homework ADD COLUMN IF NOT EXISTS lesson_id INTEGER REFERENCES lessons(id) ON DELETE SET NULL");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_homework_class ON homework (class_id, id)");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS homework_submissions (
+        id SERIAL PRIMARY KEY,
+        homework_id INTEGER NOT NULL REFERENCES homework(id) ON DELETE CASCADE,
+        student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        note TEXT NOT NULL DEFAULT '',
+        file_path VARCHAR(255),
+        file_name VARCHAR(255),
+        mime_type VARCHAR(100),
+        submitted_at BIGINT NOT NULL,
+        grade INTEGER,
+        feedback TEXT,
+        graded_at BIGINT,
+        CONSTRAINT uniq_homework_student UNIQUE (homework_id, student_id)
+    )");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_homework_submissions_hw ON homework_submissions (homework_id)");
+    $done = true;
+}
+
+/** Now, as epoch milliseconds. */
+function now_ms(): int {
+    return (int) round(microtime(true) * 1000);
+}
+
 /** Gives this user a new login token (plain text, shown to the app once; only its hash is kept). */
 function issue_auth_token(PDO $pdo, int $userId): string {
     ensure_auth_schema($pdo);
@@ -552,6 +629,24 @@ function may_download_file(PDO $pdo, array $auth, string $storedName): bool {
     );
     $stmt->execute([$storedName]);
     $row = $stmt->fetch();
+
+    if (!$row) {
+        // A student's homework file: only that student and the class's teacher
+        // (never the classmates, who ARE in the class).
+        ensure_homework_schema($pdo);
+        $stmt = $pdo->prepare(
+            'SELECT hs.student_id, h.class_id FROM homework_submissions hs
+             JOIN homework h ON h.id = hs.homework_id
+             WHERE hs.file_path = ?'
+        );
+        $stmt->execute([$storedName]);
+        $sub = $stmt->fetch();
+        if ($sub) {
+            return (int) $sub['student_id'] === (int) $auth['id']
+                || class_role($pdo, $auth, (int) $sub['class_id']) === 'owner';
+        }
+    }
+
     if (!$row) {
         // Older lessons kept a single attachment on the lesson row itself.
         $stmt = $pdo->prepare('SELECT class_id FROM lessons WHERE attachment_path = ?');
