@@ -16,6 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // checked first, so a caller without a login gets a 401 whatever else is wrong.
 $pdo = open_authenticated('Teacher', $auth);
 
+// Size cap (videos are the big ones). A multipart body larger than post_max_size arrives with
+// $_POST and $_FILES both empty, so say "too large" instead of a vague "missing fields".
+$maxMb = (int) (MAX_ATTACHMENT_BYTES / 1048576);
+if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'multipart/form-data') === 0
+        && empty($_POST) && empty($_FILES) && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+    send_json(false, "The file is too large (max $maxMb MB).");
+}
+if (isset($_FILES['file'])) {
+    $uploadError = $_FILES['file']['error'];
+    if ($uploadError === UPLOAD_ERR_INI_SIZE || $uploadError === UPLOAD_ERR_FORM_SIZE
+            || (int) ($_FILES['file']['size'] ?? 0) > MAX_ATTACHMENT_BYTES) {
+        send_json(false, "The file is too large (max $maxMb MB).");
+    }
+}
+
 $hasFile = isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK;
 
 if ($hasFile) {
@@ -24,6 +39,10 @@ if ($hasFile) {
     $name         = trim($_POST['name'] ?? '');
     $teacherEmail = trim($_POST['teacherEmail'] ?? '');
     $mimeType     = trim($_FILES['file']['type'] ?: 'application/octet-stream');
+    if ($mimeType === 'application/octet-stream') {
+        // A video the phone could not name: the file extension still says what it is.
+        $mimeType = mime_for_extension($name) ?? $mimeType;
+    }
 } else {
     $input        = read_json_body();
     $lessonId     = (int) ($input['lessonId'] ?? 0);

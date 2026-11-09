@@ -22,8 +22,9 @@ COPY backend/ /var/www/html/
 
 # Render and Railway both route traffic to $PORT (e.g. 10000 / 8080).
 # Shell form so the variable expands; default 8080 if a host forgets to set it.
-# The -d flags raise PHP's conservative CLI defaults so a 5 MB profile photo
-# or a lesson PDF can actually be uploaded (CLI defaults are 2 MB).
+# The -d flags raise PHP's conservative CLI defaults so a 5 MB profile photo,
+# a lesson PDF or a lesson video (up to MAX_ATTACHMENT_BYTES, 50 MB) can actually
+# be uploaded (CLI defaults are 2 MB).
 #
 # PHP_CLI_SERVER_WORKERS: the built-in server handles ONE request at a time,
 # so a single slow request (a database round-trip, an upload) makes every other
@@ -36,4 +37,4 @@ COPY backend/ /var/www/html/
 # forked workers on Windows, where the local XAMPP setup needs none anyway -
 # and a plain PHP_CLI_SERVER_WORKERS variable overrides the default on a
 # bigger plan.
-CMD PHP_CLI_SERVER_WORKERS=${PHP_CLI_SERVER_WORKERS:-4} php -d upload_max_filesize=32M -d post_max_size=34M -d memory_limit=256M -S 0.0.0.0:${PORT:-8080} router.php
+CMD PHP_CLI_SERVER_WORKERS=${PHP_CLI_SERVER_WORKERS:-4} php -d upload_max_filesize=64M -d post_max_size=66M -d memory_limit=256M -d max_execution_time=300 -S 0.0.0.0:${PORT:-8080} router.php

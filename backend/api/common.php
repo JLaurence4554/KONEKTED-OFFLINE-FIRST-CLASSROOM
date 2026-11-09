@@ -98,6 +98,12 @@ function storage_auth_headers(): string {
     return $headers;
 }
 
+/** The same authentication headers as a list, plus any extra lines (for cURL). */
+function storage_header_list(array $extra = []): array {
+    $lines = array_values(array_filter(explode("\r\n", storage_auth_headers()), 'strlen'));
+    return array_merge($lines, $extra);
+}
+
 /** First bytes of a Storage error reply (Supabase's own explanation, e.g. "Invalid Compact JWS"), safe to log. */
 function storage_error_detail($body): string {
     if (!is_string($body) || $body === '') {
@@ -144,6 +150,39 @@ function storage_ensure_bucket(): void {
  */
 function storage_put(string $name, string $localPath): void {
     storage_ensure_bucket();
+    $size = @filesize($localPath);
+    if ($size === false) {
+        throw new RuntimeException('storage_put: cannot read ' . $localPath);
+    }
+    if (function_exists('curl_init')) {
+        // Streams the file from disk, so a 50 MB video does not have to fit in memory (twice).
+        $fh = @fopen($localPath, 'rb');
+        if ($fh === false) {
+            throw new RuntimeException('storage_put: cannot read ' . $localPath);
+        }
+        $ch = curl_init(storage_object_url($name));
+        curl_setopt_array($ch, [
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_UPLOAD         => true,
+            CURLOPT_INFILE         => $fh,
+            CURLOPT_INFILESIZE     => $size,
+            CURLOPT_HTTPHEADER     => storage_header_list(['Content-Type: application/octet-stream', 'x-upsert: true', 'Expect:']),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT        => 300,
+        ]);
+        $result = curl_exec($ch);
+        $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+        fclose($fh);
+        if ($result === false || $status < 200 || $status >= 300) {
+            throw new RuntimeException('storage_put failed (HTTP ' . $status . ')'
+                . ($result === false ? ': ' . $curlError : storage_error_detail($result)));
+        }
+        return;
+    }
+    // No cURL extension: fall back to PHP's stream wrapper (holds the whole file in memory).
     $bytes = file_get_contents($localPath);
     if ($bytes === false) {
         throw new RuntimeException('storage_put: cannot read ' . $localPath);
@@ -212,6 +251,48 @@ function storage_get(string $name): ?array {
 }
 
 /**
+ * Open an object for streaming - nothing is loaded into memory, so a 50 MB video costs the same as a
+ * small PDF: ['stream' => resource, 'length' => ?int, 'contentType' => string], or null when no object
+ * of that name exists. The caller reads the stream and closes it.
+ */
+function storage_open(string $name): ?array {
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'GET',
+        'header'  => storage_auth_headers(),
+        'ignore_errors' => true,
+        'timeout' => 60,
+    ]]);
+    //noinspection PhpUsageOfSuppressOperator
+    $stream = @fopen(storage_object_url($name), 'rb', false, $ctx);
+    if ($stream === false) {
+        throw new RuntimeException('storage_open failed (no answer from Supabase Storage)');
+    }
+    $status = 0;
+    $length = null;
+    $contentType = 'application/octet-stream';
+    foreach ($http_response_header ?? [] as $line) {
+        if (stripos($line, 'HTTP/') === 0) {          // the last status line wins (after a redirect)
+            $status = (int) (explode(' ', $line)[1] ?? 0);
+            $length = null;
+        } elseif (stripos($line, 'content-length:') === 0) {
+            $length = (int) trim(substr($line, 15));
+        } elseif (stripos($line, 'content-type:') === 0) {
+            $contentType = trim(substr($line, 13));
+        }
+    }
+    if ($status < 200 || $status >= 300) {
+        $errorBody = (string) fread($stream, 500);
+        fclose($stream);
+        // Supabase reports a missing object as 404, or as 400 with "not_found" in the body.
+        if ($status === 404 || ($status === 400 && stripos($errorBody, 'not_found') !== false)) {
+            return null;
+        }
+        throw new RuntimeException('storage_open failed (HTTP ' . $status . ')' . storage_error_detail($errorBody));
+    }
+    return ['stream' => $stream, 'length' => $length, 'contentType' => $contentType];
+}
+
+/**
  * Remove a file wherever it lives: Supabase Storage when that is enabled,
  * and always this server's disk (harmlessly absent when storage is used).
  * The name is checked first, so it can never escape the attachments folder.
@@ -252,6 +333,9 @@ function store_uploaded_attachment(string $tmpPath, string $originalName): strin
     if (storage_enabled()) {
         try {
             storage_put($uniqueName, $dest);
+            // Supabase Storage now has the file; the container's disk is temporary anyway.
+            //noinspection PhpUsageOfSuppressOperator
+            @unlink($dest);
         } catch (Throwable $e) {
             // Never keep a half-saved upload: drop the local copy too and let
             // the endpoint report the failure to the app (it keeps its own
@@ -262,6 +346,22 @@ function store_uploaded_attachment(string $tmpPath, string $originalName): strin
         }
     }
     return $uniqueName;
+}
+
+/**
+ * Biggest lesson attachment (a video, usually) the server accepts: 50 MB, or KONEKTED_MAX_ATTACHMENT_MB.
+ * The app checks the same 50 MB before uploading, so only raise this together with the app.
+ */
+define('MAX_ATTACHMENT_BYTES', konekted_int('KONEKTED_MAX_ATTACHMENT_MB', 50) * 1048576);
+
+/** MIME type for the video extensions the app can play (null when the extension is not a known video type). */
+function mime_for_extension(string $nameOrExtension): ?string {
+    $ext = strtolower(pathinfo($nameOrExtension, PATHINFO_EXTENSION) ?: $nameOrExtension);
+    $map = [
+        'mp4' => 'video/mp4', 'm4v' => 'video/x-m4v', 'mov' => 'video/quicktime', '3gp' => 'video/3gpp',
+        'webm' => 'video/webm', 'mkv' => 'video/x-matroska', 'avi' => 'video/x-msvideo',
+    ];
+    return $map[$ext] ?? null;
 }
 
 /**

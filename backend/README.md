@@ -262,6 +262,17 @@ the container's disk - so lesson files and profile pictures survive every
 redeploy, and no Railway volume is needed. Leaving those two variables out
 keeps files on the server disk, exactly like XAMPP.
 
+**Lesson videos.** A teacher can upload a video (up to **50 MB**) like any other
+attachment; students download it once and replay it offline. The server streams
+videos to and from Supabase Storage (never loading them whole into memory) and
+refuses bigger files with a clear message. The limit can be changed with
+`KONEKTED_MAX_ATTACHMENT_MB`, but the app checks 50 MB itself, so raise both
+together; the Dockerfile allows uploads up to 64 MB. Supabase's free plan allows
+50 MB per file, about 1 GB of storage and about 5 GB of downloads a month: 30
+students downloading one 50 MB video is already 1.5 GB, so ask teachers for short,
+compressed videos (10-25 MB). Check **Storage -> Settings** in Supabase if uploads
+fail.
+
 The container starts PHP's built-in server with **four worker processes**
 (`PHP_CLI_SERVER_WORKERS` in `backend/Dockerfile`). That server answers one
 request at a time by default, so a single slow request makes every other one

@@ -28,26 +28,33 @@ try {
     }
 
     if (storage_enabled()) {
-        // Supabase Storage is the source of truth when it is configured.
-        $stored = storage_get($file);
-        if ($stored === null) {
+        // Supabase Storage is the source of truth when it is configured. The file is
+        // streamed through, never held in memory, so a 50 MB video costs the same as a PDF.
+        $object = storage_open($file);
+        if ($object === null) {
             send_json(false, 'Attachment not found.', null, 404);
         }
-        // Sniff the type from the actual bytes, as the disk path below does,
-        // so the app receives the same Content-Type either way.
-        $mime = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $stored['body']);
-        if ($mime === false || $mime === 'application/x-empty') {
-            $mime = 'application/octet-stream';
+        $stream = $object['stream'];
+        // Sniff the type from the first bytes, as the disk path below does, so the
+        // app receives the same Content-Type either way.
+        $head = (string) fread($stream, 8192);
+        $mime = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $head);
+        if ($mime === false || $mime === 'application/x-empty' || $mime === 'application/octet-stream') {
+            $mime = mime_for_extension($file) ?? 'application/octet-stream';
         }
         header('Content-Type: ' . $mime);
         header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($file));
-        header('Content-Length: ' . strlen($stored['body']));
+        if ($object['length'] !== null) {
+            header('Content-Length: ' . $object['length']);
+        }
         header('Cache-Control: no-store');
         header('X-Content-Type-Options: nosniff');
         if (ob_get_level()) {
             ob_end_clean();
         }
-        echo $stored['body'];
+        echo $head;
+        fpassthru($stream);
+        fclose($stream);
         exit;
     }
 
@@ -58,8 +65,8 @@ try {
 
     // Determine MIME safely. Fall back to the stored mime when available.
     $mime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $fullPath);
-    if ($mime === false || $mime === 'application/x-empty') {
-        $mime = 'application/octet-stream';
+    if ($mime === false || $mime === 'application/x-empty' || $mime === 'application/octet-stream') {
+        $mime = mime_for_extension($file) ?? 'application/octet-stream';
     }
 
     header('Content-Type: ' . $mime);

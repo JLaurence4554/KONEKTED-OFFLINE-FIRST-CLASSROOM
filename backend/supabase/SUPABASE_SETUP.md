@@ -81,6 +81,7 @@ Never put the password in a file that goes to GitHub.
 
 ## Good to know
 
+- **Lesson videos:** teachers can upload videos up to 50 MB (`KONEKTED_MAX_ATTACHMENT_MB` changes the limit). The free plan allows 50 MB per file, 1 GB of storage and about 5 GB of downloads a month, so advise short, compressed videos (10-25 MB). In the Supabase dashboard check **Storage -> Settings** that the upload limit is 50 MB.
 - **Free plan limits:** 500 MB database, 1 GB file storage. A free project is **paused after 1 week with no activity**. If it is paused, open the Supabase dashboard and click **Restore** before a demo. Check supabase.com/pricing for the current numbers.
 - **Your existing accounts and classes** live in the database on your laptop. A new Supabase database starts empty. Moving the data over is possible (ask for it). The phones also keep their own copies and sync them back up.
 - **Why the tables are locked:** Supabase publishes tables on the internet through its own API. KONEKTED does not use that API, so `schema_supabase.sql` locks every table for it. Do not turn the lock off and do not share the project's secret keys.

@@ -71,10 +71,13 @@ rrmdir($tmp);
 rcopy($backend . '/api', $tmp . '/api');
 rcopy($backend . '/config', $tmp . '/config');
 
-function start_server(string $root, int $port, array $extraEnv = []) {
+function start_server(string $root, int $port, array $extraEnv = [], array $phpFlags = [], ?string $router = null) {
     $env = array_merge(getenv(), ['KONEKTED_DB_NAME' => TEST_DB], $extraEnv);
     $log = $root . DIRECTORY_SEPARATOR . "server_$port.log";
-    $proc = proc_open([PHP_BINARY, '-S', "127.0.0.1:$port", '-t', $root],
+    // The same upload limits as backend/Dockerfile (a later -d wins, so $phpFlags can tighten them).
+    $flags = array_merge(['-d', 'upload_max_filesize=64M', '-d', 'post_max_size=66M', '-d', 'memory_limit=256M'], $phpFlags);
+    $cmd = array_merge([PHP_BINARY], $flags, ['-S', "127.0.0.1:$port", '-t', $root], $router !== null ? [$router] : []);
+    $proc = proc_open($cmd,
         [0 => ['pipe', 'r'], 1 => ['file', $log, 'w'], 2 => ['file', $log, 'a']], $pipes, $root, $env);
     for ($i = 0; $i < 50; $i++) {
         $fp = @fsockopen('127.0.0.1', $port, $errno, $errstr, 0.2);
@@ -319,6 +322,68 @@ expect('a path trick is refused (400)', $r['status'] === 400);
 file_put_contents($tmp . '/attachments/orphan_123.pdf', 'orphan');
 $r = $dl('orphan_123.pdf', $T1);
 expect('a file that no lesson or profile points to is nobody\'s to download (403)', $r['status'] === 403);
+
+// ---------------------------------------------------------------- lesson videos
+// An offline lesson video is an ordinary FILE attachment. These checks run the whole path - upload,
+// storage in a stand-in for Supabase Storage, download - and then prove with a 24 MB memory limit that
+// a 40 MB file is streamed to storage and back, never held in memory.
+section('Lesson videos (stored in a stand-in for Supabase Storage)');
+$fakeDir = $tmp . '/fake_storage'; mkdir($fakeDir);
+$fakeLog = $tmp . '/fake_storage.log';
+$fakePort = TEST_PORT + 3;
+$fake = proc_open([PHP_BINARY, '-S', "127.0.0.1:$fakePort", '-t', $fakeDir, $backend . '/tests/fake_storage_router.php'],
+    [0 => ['pipe', 'r'], 1 => ['file', $fakeLog, 'w'], 2 => ['file', $fakeLog, 'a']], $fakePipes, $fakeDir,
+    array_merge(getenv(), ['KT_FAKE_STORE_DIR' => $fakeDir]));
+for ($i = 0; $i < 50; $i++) { $fp = @fsockopen('127.0.0.1', $fakePort, $e1, $e2, 0.2); if ($fp) { fclose($fp); break; } usleep(200000); }
+$storageEnv = ['KONEKTED_SUPABASE_URL' => "http://127.0.0.1:$fakePort", 'KONEKTED_SUPABASE_STORAGE_KEY' => 'sb_secret_testkey'];
+// A 1 MB cap here (the real one is 50 MB) so the size check can be tested without sending 51 MB.
+$server3 = start_server($tmp, TEST_PORT + 2, $storageEnv + ['KONEKTED_MAX_ATTACHMENT_MB' => '1']);
+$base3 = 'http://127.0.0.1:' . (TEST_PORT + 2) . '/api/';
+$upload3 = fn(string $path, string $mime, string $name) => call('POST', 'sync_lesson_attachment.php',
+    ['lessonId' => $lessonId, 'type' => 'FILE', 'name' => $name, 'teacherEmail' => 't1@school.test', 'file' => new CURLFile($path, $mime, $name)],
+    $T1, [], true, $base3);
+$stored = fn(int $id) => (string) $db->query("SELECT file_path FROM lesson_attachments WHERE id = $id")->fetchColumn();
+
+$mp4Bytes = "\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom" . random_bytes(4096);
+$mp4Path = $tmp . '/lesson.mp4'; file_put_contents($mp4Path, $mp4Bytes);
+$r = $upload3($mp4Path, 'video/mp4', 'lesson.mp4');
+$attMp4 = (int) (data($r)['serverId'] ?? 0);
+expect('the teacher can upload a video', ok($r) && $attMp4 > 0, json_encode($r['json']));
+$mp4File = $stored($attMp4);
+expect('the video keeps its .mp4 name', str_ends_with($mp4File, '.mp4'), $mp4File);
+expect('the video is in storage, and the server\'s own disk copy is gone', is_file($fakeDir . '/' . $mp4File) && !is_file($tmp . '/attachments/' . $mp4File));
+$r = call('GET', 'download_attachment.php?file=' . rawurlencode($mp4File), null, $S1, [], false, $base3);
+expect('a student downloads the video byte for byte', $r['status'] === 200 && $r['body'] === $mp4Bytes);
+expect('...as video/mp4, with a Content-Length', stripos($r['head'], 'Content-Type: video/mp4') !== false && stripos($r['head'], 'Content-Length: ' . strlen($mp4Bytes)) !== false, $r['head']);
+$r = call('GET', 'download_attachment.php?file=' . rawurlencode($mp4File), null, $S3, [], false, $base3);
+expect('a student outside the class still cannot (403)', $r['status'] === 403);
+$r = call('GET', 'download_attachment.php?file=' . rawurlencode('missing_' . $mp4File), null, $T1, [], false, $base3);
+expect('a file that is not in storage is nobody\'s to download (403)', $r['status'] === 403);
+
+$r = $upload3($mp4Path, 'application/octet-stream', 'clip2.mp4');
+$attClip = (int) (data($r)['serverId'] ?? 0);
+$mimeSaved = (string) $db->query("SELECT mime_type FROM lesson_attachments WHERE id = $attClip")->fetchColumn();
+expect('a video the phone could not name is recorded as video/mp4', ok($r) && $mimeSaved === 'video/mp4', $mimeSaved);
+
+$underPath = $tmp . '/under.mp4'; file_put_contents($underPath, str_repeat('v', 900 * 1024));
+$r = $upload3($underPath, 'video/mp4', 'under.mp4');
+expect('a video just under the size limit is accepted', ok($r), $r['status'] . ' ' . $r['body']);
+$overPath = $tmp . '/over.mp4'; file_put_contents($overPath, str_repeat('v', 1536 * 1024));
+$r = $upload3($overPath, 'video/mp4', 'over.mp4');
+expect('a video over the limit is refused with a clear message', !ok($r) && str_contains((string) ($r['json']['message'] ?? ''), 'too large'), $r['status'] . ' ' . $r['body']);
+$r = call('POST', 'sync_lesson_attachment.php', ['lessonId' => $lessonId, 'type' => 'VIDEO_LINK', 'name' => 'https://example.com/v2'], $T1, [], false, $base3);
+expect('a plain link (JSON body) is not mistaken for an oversize upload', ok($r), $r['status'] . ' ' . $r['body']);
+foreach ([$underPath, $overPath] as $f) @unlink($f);
+
+// 40 MB through storage_put() / storage_open() with PHP held to 24 MB of memory (the old code needed ~3x the file).
+$out = []; $code = 1;
+foreach ($storageEnv as $k => $v) putenv("$k=$v");
+exec(escapeshellarg(PHP_BINARY) . ' -d memory_limit=24M ' . escapeshellarg($backend . '/tests/storage_stream_check.php') . ' 2>&1', $out, $code);
+foreach ($storageEnv as $k => $v) putenv($k);   // do not leak into the servers started later
+$line = trim(implode(' ', $out));
+expect('a 40 MB file goes to storage and back, intact, with PHP limited to 24 MB', $code === 0 && str_starts_with($line, 'OK'), $line);
+proc_terminate($server3);
+proc_terminate($fake);
 
 $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');
 $pngPath = $tmp . '/me.png'; file_put_contents($pngPath, $png);
